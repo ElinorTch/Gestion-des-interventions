@@ -42,7 +42,6 @@ public class Personnel implements Serializable {
     @OneToMany(mappedBy = "personnel")
     private List<Intervention> interventions;
 
-    @JsonIgnore
     @ToString.Exclude
     @ManyToMany
     @JoinTable(name = "utilisateur_role",

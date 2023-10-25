@@ -11,7 +11,7 @@ import { Personnel } from 'src/app/shared/interfaces/personnel-interface';
 })
 export class PersonnelsAdminComponent implements OnInit {
 
-  composantVisible = true;
+  composantVisible = false;
 
   personnelList: Personnel[] = [];
   isGettingAll = true

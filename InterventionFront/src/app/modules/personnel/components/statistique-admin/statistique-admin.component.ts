@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StatistiqueAdminComponent implements OnInit {
 
-  composantVisible = true;
+  composantVisible = false;
   basicData: any;
 
   

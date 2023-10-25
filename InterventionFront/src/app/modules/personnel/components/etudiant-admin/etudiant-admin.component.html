@@ -19,7 +19,8 @@
             sortMode="multiple" responsiveLayout="scroll" [resizableColumns]="true" [responsive]="true"
             currentPageReportTemplate="affiche {first} à {last} sur {totalRecords} entrées"
             [showCurrentPageReport]="true"
-            [globalFilterFields]="['codeEtudiant', 'matricule' , 'code authentification']" class="d-flex" class="table">
+            [globalFilterFields]="['codeEtudiant', 'matricule' , 'code authentification', 'nom', 'prenom', 'email']"
+            class="d-flex" class="table">
             <ng-template pTemplate="caption">
                 <div class="d-flex p-ai-center justify-content-between">
                     <h2 class="p-m-0">Etudiants</h2>
@@ -38,8 +39,11 @@
                     <th pSortableColumn="matricule">Matricule <p-sortIcon field="matricule"></p-sortIcon>
                     <th pSortableColumn="code">Code <p-sortIcon field="code"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="code authentification">Code authentification <p-sortIcon
-                            field="code authentification"></p-sortIcon>
+                    <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="prenom">Prénom <p-sortIcon field="prenom"></p-sortIcon>
                     </th>
                 </tr>
             </ng-template>
@@ -50,7 +54,9 @@
                     </td> -->
                     <td>{{etudiantItem.matricule}}</td>
                     <td>{{etudiantItem.codeEtudiant}}</td>
-                    <td>{{etudiantItem.codeAuthentification}}</td>
+                    <td>{{etudiantItem.candidat.email}}</td>
+                    <td>{{etudiantItem.candidat.nom}}</td>
+                    <td>{{etudiantItem.candidat.prenom}}</td>
                 </tr>
             </ng-template>
         </p-table>

@@ -14,7 +14,7 @@ export class DashboardAdminComponent implements OnInit {
   tailleEtudiant: any
   tailleIntervention: any
 
-  composantVisible = true;
+  composantVisible = false;
   basicData: any;
 
   basicOptions: any;

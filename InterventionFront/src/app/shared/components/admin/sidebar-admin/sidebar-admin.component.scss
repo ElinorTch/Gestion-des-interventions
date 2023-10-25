@@ -68,3 +68,10 @@ li:hover {
 li:hover .link {
     color: black !important;
 }
+
+
+@media(max-width : 1700px){
+    .contenu-aside{
+        width: 90%;
+    }
+}

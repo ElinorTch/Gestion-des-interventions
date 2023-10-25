@@ -22,8 +22,10 @@ export class InterventionAdminComponent implements OnInit {
   senddingRequest = false;
   interventionDialog = false;
   selectedFile: any;
-
-  composantVisible = true;
+  details: any[] = []
+  composantVisible = false;
+  inToken: any = '202320';
+  selectedIntervention:any
 
   interventionForm = this.formBuilder.group({
     id_intervention: new FormControl(''),
@@ -45,15 +47,16 @@ export class InterventionAdminComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllIntervention()
+    // this.recupererDetails()
   }
 
-  editIntervention(intervention: Intervention, e: Event): void {
-    e.stopPropagation()
-    this.interventionDialog = true;
-    this.isUpdating = true;
+  detailsIntervention(intervention: any): void {
+    this.selectedIntervention = intervention;
+    this.interventionDialog = true  
     console.log(intervention);
-    this.setFormData(intervention)
+    
   }
+
 
   onChange(e: any): void {
     this.selectedFile = e.target.files[0].name;
@@ -102,15 +105,93 @@ export class InterventionAdminComponent implements OnInit {
 
   }
 
-  fermer() {
-    if (this.isUpdating === false) {
-      this.messageService.add({ severity: 'error', summary: 'erreur', detail: 'operation annulée', life: 3000 });
-    }
-    this.interventionDialog = false;
+  demandeTraitee(itemIntervention: any) {
+    this.submitting = true;
+    this.interventionService.prendreEnCharge(itemIntervention, this.enumList[2], itemIntervention.idDemande, this.inToken).toPromise().then(() => {
+      this.messageService.add({
+        severity: 'info',
+        summary: 'TRAITEE', 
+        detail: `Intervention bien traitée !`,
+        life: 3000
+      });
+      this.submitting = false
+      // window.location.reload()
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+
+    },
+      () => {
+        this.messageService.add({ severity: 'error', summary: 'erreur', detail: 'erreur lors du traitement de la requete', life: 3000 });
+        // window.location.reload()
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+
+      }
+    )
+  }
+  demandeTraitement(itemIntervention: any) {
+    this.submitting = true;
+    this.interventionService.prendreEnCharge(itemIntervention, this.enumList[1], itemIntervention.idDemande, this.inToken).toPromise().then(() => {
+      this.messageService.add({
+        severity: 'info',
+        summary: 'En Traitement',
+        detail: `Intervention en cours de traitement !`,
+        life: 3000
+      });
+      this.submitting = false;
+      // window.location.reload()
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+
+    },
+      () => {
+        this.messageService.add({ severity: 'error', summary: 'erreur', detail: 'erreur lors du traitement de la requete', life: 3000 });
+        // window.location.reload()
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+
+      }
+    )
+  }
+  demandeEchec(itemIntervention: any) {
+    this.submitting = true;
+    this.interventionService.prendreEnCharge(itemIntervention, this.enumList[3], itemIntervention.idDemande, this.inToken).toPromise().then(() => {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'ECHEC',
+        detail: `Intervention est passée en mode ECHEC !`,
+        life: 8000
+      });
+      this.submitting = false
+      // window.location.reload()
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+
+    },
+      () => {
+        this.messageService.add({ severity: 'error', summary: 'erreur', detail: 'erreur lors du traitement de la requete', life: 3000 });
+        // window.location.reload()
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+
+      }
+    )
   }
 
   getAllIntervention() {
-    this.interventionService.getAllIntervention().subscribe((data: any) => {
+    this.interventionService.getInterventionByPersonnel(this.inToken).subscribe((data: any) => {
       this.isGettingAll = false
       this.messageService.add({
         severity: 'success',

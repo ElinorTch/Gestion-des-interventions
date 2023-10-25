@@ -39,6 +39,9 @@ import { PersonnelComponent } from './modules/personnel/personnel.component';
 import { PersonnelsAdminComponent } from './modules/personnel/components/personnels-admin/personnels-admin.component';
 import { ChartModule } from 'primeng/chart';
 
+import { DetailsInerventionComponent } from './shared/details-inervention/details-inervention.component';
+
+
 
 @NgModule({
   declarations: [
@@ -62,7 +65,8 @@ import { ChartModule } from 'primeng/chart';
     MessagesComponent,
     HomeComponent,
     HomeHeaderComponent,
-    HomeNavComponent
+    HomeNavComponent,
+    DetailsInerventionComponent
   ],
   imports: [
     BrowserModule,

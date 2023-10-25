@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+
 import lombok.*;
 
 import java.io.Serializable;
@@ -14,7 +15,9 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Builder
+
 @Table(name = "etudiant")
 //@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "jsonIdentifier")
 public class Etudiant implements Serializable {
