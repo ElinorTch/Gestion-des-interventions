@@ -1,0 +1,51 @@
+<div class="background">
+    <div class="container login_box_area">
+      <div class="row">
+        <div class="col-md-6 col-sm-12 col-xs-12 image-fluid login_box_area_image">
+          <img src="../../../../assets/images/saint2.jpg" alt="">
+          <div class="hello">
+            <h2>Bienvenue !</h2>
+            <p>Nous sommes heureux de vous sentir parmis nous! Entrez vos informations pour vous connecter</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-12 col-xs-12 login_box_area_form">
+          <form action="" [formGroup]="formPersonnel" (submit)="loginPersonnel()" method="post">
+            <h3>Connexion</h3>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" formControlName="login" id="login" placeholder="Login">
+              <label for="login">Login* </label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="password" class="form-control" formControlName="mot_de_passe" placeholder="Mot de passe"
+                id="pass">
+              <label for="pass">Mot de passe*</label>
+            </div>
+            <div class="checkbox_group">
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                  Se Souvenir de moi
+                </label>
+              </div>
+            </div>
+            <button type="submit" class="btn col-md-12 col-sm-12 col-xs-12 "
+              [disabled]="formPersonnel.invalid || submitting"><span *ngIf="!submitting">connexion</span>
+              <div *ngIf="submitting" class="spinner-border text-sucess" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </button>
+            <hr>
+            <li class="forgot_password">
+              <span href="#">Mot De Passe Oublié?</span>
+            </li>
+            <li class="forgot_password otherForm mt-3">
+              <span (click)="formetudiant()">Etudiant?</span>
+            </li>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <p-toast></p-toast>
+  

@@ -1,0 +1,23 @@
+<div class="dashboard container">
+    <h2>Statistiques sur les interventions</h2>
+
+    <div class="statistiques col-md-4">
+        <div class="card flex justify-content-center">
+            <p-chart type="pie" [data]="data" [options]="options"></p-chart>
+        </div>
+    </div>  
+
+    <div class="container stats">
+        <div class="card">
+            <p-chart class="chart" type="bar" [data]="basicData" [options]="basicOptions"></p-chart>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="composantVisible" class="message">
+    <app-messages></app-messages>
+</div>
+
+<button class="chat" (click)="hidden()">
+    <i class='bx bx-message-rounded-dots'></i>
+</button>

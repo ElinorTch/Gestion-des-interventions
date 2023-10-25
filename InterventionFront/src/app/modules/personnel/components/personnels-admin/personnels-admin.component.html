@@ -1,0 +1,76 @@
+<div class="container etudiants">
+    <h2>Liste du personnel</h2>
+
+    <div class="main-content">
+        <div class="mt-4 mb-3">
+            <p-toolbar styleClass="mb-4">
+
+                <ng-template pTemplate="right">
+                    <div class="flex">
+                        <button type="button" [disabled]="isGettingAll || this.personnelList.length == 0" pButton
+                            pRipple icon="bx bxs-file-export" (click)="exportExcel()" label="Exporter"
+                            class="p-button-warning mr-2" pTooltip="XLS" style="width: max-content; padding: .5em;"
+                            tooltipPosition="bottom"></button>
+                    </div>
+                </ng-template>
+            </p-toolbar>
+        </div>
+        <p-table #dt [rows]="7" [loading]="isGettingAll" [rowHover]="true" [paginator]="true" [value]="personnelList"
+            sortMode="multiple" responsiveLayout="scroll" [resizableColumns]="true" [responsive]="true"
+            currentPageReportTemplate="affiche {first} à {last} sur {totalRecords} entrées"
+            [showCurrentPageReport]="true" [globalFilterFields]="['codePersonnel', 'Nom' , 'prenom', 'Email']"
+            class="d-flex" class="table">
+            <ng-template pTemplate="caption">
+                <div class="d-flex p-ai-center justify-content-between">
+                    <h2 class="p-m-0">Personnels</h2>
+                    <span class="p-input-icon-left" style="display: flex; align-items: center; width:30%">
+                        <i class="fi fi-br-search"></i>
+                        <input pInputText [(ngModel)]="search" (input)="dt.filterGlobal(search, 'contains')" type="text"
+                            class="form-control" style="padding-left: 50px;" placeholder="Rechercher..." />
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <!-- <th style="width: 3rem">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th> -->
+                    <th pSortableColumn="code">Code <p-sortIcon field="code"></p-sortIcon>
+                    <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon>
+                    <th pSortableColumn="prenom">Prenom <p-sortIcon field="prenom"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="email">Email <p-sortIcon
+                            field="email"></p-sortIcon>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-personnelItem>
+                <tr>
+                    <!-- <td>
+                        <p-tableCheckbox [value]="personnelItem"></p-tableCheckbox>
+                    </td> -->
+                    <td>{{personnelItem.codePersonnel}}</td>
+                    <td>{{personnelItem.nom}}</td>
+                    <td>{{personnelItem.prenom}}</td>
+                    <td>{{personnelItem.email}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <ng-template pTemplate="header">
+            <div>
+                Il y a au total {{ personnelList ? personnelList.length : 0 }} etudiant(s).
+            </div>
+        </ng-template>
+    </div>
+
+</div>
+
+<div *ngIf="composantVisible" class="message">
+    <app-messages></app-messages>
+</div>
+
+<button class="chat" (click)="hidden()">
+    <i class='bx bx-message-rounded-dots'></i>
+</button>
+
+<p-toast></p-toast>

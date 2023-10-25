@@ -1,0 +1,43 @@
+<article class="boiteMessage">
+    <div class="innerApp">
+        <header class="header">
+            <h3>Messages</h3>
+        </header>
+        <section class="innerContent">
+            <div class="innerConversation">
+                <div class="you_converse">
+                    <p class="msg">Merci pour cette application très efficace </p>
+                    <p class="nom">2223i389</p>
+                    <p class="date">2023-10-10</p>
+                </div>
+                <div class="you_converse">
+                    <p class="msg">Merci pour cette application très efficace </p>
+                    <p class="nom">2223i389</p>
+                    <p class="date">2023-10-10</p>
+                </div>
+                <div class="my_converse">
+                    <p class="msg">Pas de quoi être content pour cette application elle était nécessaire pour la validation de notre Unité d'enseignement </p>
+                    <p class="nom">Emmanuel</p>
+                    <p class="date">2023-10-10</p>
+                </div>
+                <div class="my_converse">
+                    <p class="msg">Pas de quoi être content pour cette application elle était nécessaire pour la validation de notre Unité d'enseignement </p>
+                    <p class="nom">Pessa</p>
+                    <p class="date">2023-10-10</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <form action="" [formGroup]="messageForm" method="post" (submit)="sendMessage($event)">
+            <input type="text" name="" formControlName="matricule_etudiant" id="" class="d-none">
+            <input type="text" name="" formControlName="login_utilisateur" id="" class="d-none">
+            <textarea name="" formControlName="message" id="" rows="1" class="form-control input"
+                placeholder="Votre message" (resize)="false"></textarea>
+            <button type="submit" class="btn " [disabled]="messageForm.invalid">
+                <span> Envoie</span>
+            </button>
+        </form>
+    </footer>
+</article>

@@ -1,0 +1,130 @@
+.about-section {
+    background: #f5f5f5;
+    padding: 20px 0 50px 0;
+    width: 100%;
+    height: auto;
+
+    .content-about {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h2 {
+            margin-top: 50px;
+            margin-bottom: 50px;
+            color: black;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        p {
+            text-align: justify;
+            color: rgba(0, 0, 0, 0.616);
+            line-height: 2.5;
+        }
+
+        .image {
+            width: 500px;
+            height: 500px;
+            float: right;
+            box-sizing: border-box;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+            }
+        }
+    }
+}
+
+//contact section
+.contact-section {
+    background: #e6e5e5;
+    padding: 20px 0 50px 0;
+    width: 100%;
+    height: auto;
+
+    h2 {
+        margin-top: 50px;
+        margin-bottom: 50px;
+        color: var(--main-clr);
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .content-about {
+        // width: 100%;
+        // display: flex;
+        // justify-content: space-between;
+        // align-items: center;
+        text-align: center;
+        // display: grid;
+        // grid-template-columns: repeat(auto-fit, minmax(20%, auto));
+        // gap: 1.2rem;
+        // text-align: center;
+
+        i {
+            // width: 150px;
+            // height: 150px;
+            border-radius: 50%;
+            color: var(--mainColor);
+            display: block;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            height: 70px;
+            // background-color: white;
+            padding: 10px 10px 10px 10px;
+            font-size: 50px;
+        }
+
+        h6 {
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
+        p {
+            font-size: 15px;
+        }
+    }
+}
+
+//localisation
+.localisation-section {
+    background: #f5f5f5;
+    padding: 20px 0 50px 0;
+    width: 100%;
+    height: auto;
+
+
+    h2 {
+        margin-top: 50px;
+        margin-bottom: 50px;
+        color: var(--main-clr);
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+}
+
+
+
+//footer
+.footer-section {
+    background: var(--mainColor);
+    padding: 20px 0 5px 0;
+    width: 100%;
+    height: auto;
+
+    .footer-content {
+        // box-shadow: 0px -3px 8px #bdbdbd;
+        padding-top: 5px;
+
+        p {
+            color: white;
+            opacity: 1;
+            font-weight: 600;
+            text-align: center;
+        }
+    }
+}
