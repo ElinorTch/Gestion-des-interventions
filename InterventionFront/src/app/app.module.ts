@@ -38,7 +38,9 @@ import { TableModule } from 'primeng/table';
 import { PersonnelComponent } from './modules/personnel/personnel.component';
 import { PersonnelsAdminComponent } from './modules/personnel/components/personnels-admin/personnels-admin.component';
 import { ChartModule } from 'primeng/chart';
+
 import { DetailsInerventionComponent } from './shared/details-inervention/details-inervention.component';
+
 
 
 @NgModule({

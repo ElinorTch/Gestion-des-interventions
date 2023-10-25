@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { Personnel } from 'src/app/shared/interfaces/personnel-interface';
 import { environment } from 'src/environments/environment';
+import { AxiosService } from '../axios/axios.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class PersonnelAuthService {
 
   rootURL = `${environment.api}utilisateur`;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private axios : AxiosService) {
     let storageUser;
     const storageUserAstr = localStorage.getItem('currentUser');
     if (storageUserAstr) {
@@ -27,16 +28,26 @@ export class PersonnelAuthService {
     return this.currentUserSubject.value;
   }
 
-  login(userData: any): Observable<any> {
-    return this.http.post<any>(`${this.rootURL}/login`, userData).pipe(
-      map((response: Personnel) => {
-        if (response) {
-          localStorage.setItem('currentUser', JSON.stringify(response))
-          this.currentUserSubject.next(response)
-        }
-        return response
-      })
-    );
+  login(userData: any): Promise<any> {
+    // return this.http.post<any>(`${this.rootURL}/login`, userData).pipe(
+    //   map((response: Personnel) => {
+    //     if (response) {
+    //       localStorage.setItem('currentUser', JSON.stringify(response))
+    //       this.currentUserSubject.next(response)
+    //     }
+    //     return response
+    //   })
+    // );
+    return this.axios.request(
+      "POST",
+      "/login/Personnel",
+      {
+        login : userData.login,
+        password : userData.mot_de_passe
+      }
+    ).then(reponse => {
+      this.axios.setAuthToken(reponse.data.token);
+    })
   }
 
   getToken() {

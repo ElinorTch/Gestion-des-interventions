@@ -26,7 +26,7 @@ export class LoginEtudiantComponent implements OnInit {
     this.authService.login({
       matricule: this.loginForm.value.matricule,
       codeAuthentification: this.loginForm.value.codeAuthentification
-    }).toPromise().then((data: any) => {
+    }).then((data: any) => {
       this.submitting = false;
       this.messageService.add({
         icon: 'fi fi-br-check-circle',

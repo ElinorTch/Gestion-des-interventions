@@ -25,12 +25,11 @@ export class LoginPersonnelComponent {
 
   loginPersonnel(): void {
     this.submitting = true;
-    console.log(this.formPersonnel);
+    console.log(this.formPersonnel.value);
     this.authPersonnelService.login({
       login: this.formPersonnel.value.login,
       mot_de_passe: this.formPersonnel.value.mot_de_passe
-
-    }).toPromise().then((data: any) => {
+    }).then((data: any) => {
       this.submitting = false;
       this.messageService.add({
         icon: 'fi fi-br-check-circle',
