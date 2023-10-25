@@ -1,0 +1,219 @@
+<div class="container interventions">
+    <h2>Liste des interventions</h2>
+
+    <div class="main-content">
+        <div class="mt-4 mb-3">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="flex">
+                        <button type="button" [disabled]="isGettingAll || this.interventionList.length == 0" pButton
+                            pRipple icon="bx bxs-file-export" (click)="exportExcel()" label="Exporter"
+                            class="p-button-warning mr-2" pTooltip="XLS" style="width: max-content;padding: .5em;"
+                            tooltipPosition="bottom"></button>
+                    </div>
+                </ng-template>
+            </p-toolbar>
+        </div>
+
+        <p-table #dt [rows]="5" [loading]="isGettingAll" [rowHover]="true" [paginator]="true" [value]="interventionList"
+            sortMode="multiple" responsiveLayout="scroll" [resizableColumns]="true" [responsive]="true"
+            currentPageReportTemplate="affiche {first} à {last} sur {totalRecords} entrées"
+            [showCurrentPageReport]="true" [globalFilterFields]="['nom_intervention', 'status' , 'matricule_etudiant']">
+            <ng-template pTemplate="caption">
+                <div class="d-flex p-ai-center justify-content-between">
+                    <h4 class="p-m-0"></h4>
+                    <span class="p-input-icon-left" style="display: flex; align-items: center; width:30%">
+                        <i class="fi fi-br-search"></i>
+                        <input pInputText [(ngModel)]="search" (input)="dt.filterGlobal(search, 'contains')" type="text"
+                            class="form-control" style="padding-left: 50px; " placeholder="Rechercher..." />
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <!-- <th style="width: 3rem">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th> -->
+                    <th pSortableColumn="nom_intervention">Nom <p-sortIcon field="nom_intervention"></p-sortIcon>
+                    <th pSortableColumn="description">Description
+                    </th>
+                    <th pSortableColumn="matricule_etudiant">Matricule Etudiant <p-sortIcon
+                            field="matricule_etudiant"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="pieceJointe">Piece Jointe <p-sortIcon field="pieceJointe"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="date">Date Creation <p-sortIcon field="date"></p-sortIcon>
+                    </th>
+                    <th>actions</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-interventionItem>
+                <tr>
+                    <!-- <td>
+                        <p-tableCheckbox [value]="interventionItem"></p-tableCheckbox>
+                    </td> -->
+                    <td>{{interventionItem.sousCategorie.libelle}}</td>
+                    <td>{{truncateDescription(interventionItem.libelleIntervention)}}</td>
+                    <td>{{interventionItem.etudiant.matricule }}</td>
+                    <td>
+                        <p *ngIf="interventionItem.status == this.enumList[0]" class="btn btn-warning">
+                            {{interventionItem.status}}
+                        </p>
+                        <p *ngIf="interventionItem.status == this.enumList[1]" class="btn btn-dark">
+                            {{interventionItem.status}}
+                        </p>
+                        <p *ngIf="interventionItem.status == this.enumList[2]" class="btn btn-success">
+                            {{interventionItem.status}}
+                        </p>
+                        <p *ngIf="interventionItem.status == this.enumList[3]" class="btn btn-danger">
+                            {{interventionItem.status}}
+                        </p>
+                    </td>
+                    <td>
+                        <p *ngIf="interventionItem.pieceJointe">{{interventionItem.pieceJointe}}</p>
+                        <p *ngIf="!interventionItem.pieceJointe">RAS</p>
+                    </td>
+                    <td>{{interventionItem.dateDemande | date : 'YYYY-MM-dd'}}</td>
+                    <td>
+                       <div class="row">
+                        <button pButton pRipple class="p-button-rounded mr-1"
+                        *ngIf="interventionItem.status == 'ECHEC' || 'TRAITEE' && interventionItem.status != 'ATTENTE' && interventionItem.status != 'TRAITEMENT'"
+                        style="background: danger; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: .5em; background: rgb(8, 3, 39); border: none;"
+                        [disabled]="interventionItem.status == 'ECHEC' || interventionItem.status == 'TRAITEE'"
+                        (click)="editIntervention(interventionItem, $event)">
+                        <i class='bx bxs-tired bx-tada'></i>
+                    </button>
+                    <div class="row">
+                        <div class="col" *ngIf="interventionItem.status == 'ATTENTE'">
+                            <button pButton pRipple class="p-button-rounded mr-1"
+                                style="background: danger; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: .5em; background: blue; border: none;"
+                                [disabled]="interventionItem.status == 'ECHEC' || interventionItem.status == 'TRAITEE'"
+                                (click)="editIntervention(interventionItem, $event)">
+                                <i class='bx bx-pencil'></i>
+                            </button>
+                        </div>
+                        <div class="col" *ngIf="interventionItem.status == 'TRAITEMENT'">
+                            <div class="row">
+                                <div class="col"><button pButton pRipple class="p-button-rounded mr-1 "
+                                        style="background: danger; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: .5em; background: green; border: none;"
+                                        (click)="editIntervention(interventionItem, $event)">
+                                        <i class='bx bx-user-check'></i>
+                                    </button></div>
+                                <div class="col">
+
+                                    <button pButton pRipple class="p-button-rounded mr-1 "
+                                        style="background: danger; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: .5em; background: red; border: none;"
+                                        (click)="editIntervention(interventionItem, $event)">
+                                        <i class='bx bx-user-x'></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button pButton pRipple class="p-button-rounded mr-1 "
+                    style="background: danger; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: .5em; background: rgb(0, 195, 255); border: none;"
+                    (click)="editIntervention(interventionItem, $event)">
+                    <i class='bx bx-file-find bx-tada'></i>
+                </button>
+                       </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <ng-template pTemplate="header">
+            <div class="d-flex align-items-center justify-content-between">
+                Il ya au total {{ interventionList ? interventionList.length : 0 }} intervention(s).
+            </div>
+        </ng-template>
+
+    </div>
+</div>
+
+
+<div *ngIf="composantVisible" class="message">
+    <app-messages></app-messages>
+</div>
+
+<button class="chat" (click)="hidden()">
+    <i class='bx bx-message-rounded-dots'></i>
+</button>
+
+
+<p-confirmDialog [style]="{width: '650px'}"></p-confirmDialog>
+<p-dialog [style]="{width: '750px'}" header=" Prendre en charge" [(visible)]="interventionDialog" [modal]="true"
+    [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+    <form class="p-4" [formGroup]=" interventionForm" (ngSubmit)="saveIntervention($event)"
+        enctype="multipart/form-data">
+        <div class="form-floating mb-4 d-none">
+            <input type="text" class="form-control" id="matricule" formControlName="matricule_etudiant"
+                name="matricule_etudiant">
+            <label for="matricule">Matricule* </label>
+        </div>
+        <div class="form-floating mb-4 d-none">
+            <select name="" id="personnel" class="form-control" name="login_utilisateur"
+                formControlName="login_utilisateur">
+                <option *ngFor="let item of personnelList" [value]="item.login">{{item.nom}} {{item.prenom}}
+                </option>
+            </select>
+            <label for="personnel">Personnel*</label>
+        </div>
+        <div class="form-floating mb-4 d-none">
+            <!-- <select [(ngModel)]="model">
+        <option *ngFor="let item of list" [value]="item">{{item}}</option>
+      </select> -->
+            <select name="" id="intervention" class="form-control" name="nom_intervention"
+                formControlName="nom_intervention">
+                <option value="Orientation scolaire">Orientation scolaire</option>
+                <option value="Certificat de Scolarite">Certificat de Scolarite</option>
+                <option value="Relevés de notes">Relevés de notes</option>
+                <option value="Reçus de paiement">Reçus de paiement</option>
+            </select>
+            <!-- <input type="password" class="form-control" formControlName="departement"
+        placeholder="Code Authentification" id="departement"> -->
+            <label for="intervention">Intervention*</label>
+        </div>
+        <div class="p-float-label mb-4 d-none">
+            <textarea name="" id="description" cols="30" rows="10" name="description" formControlName="description"
+                placeholder="Entrer une description" class="form-control"></textarea>
+            <!-- <label for="description">Description* </label> -->
+        </div>
+
+        <div class="form-floating mb-4">
+            <select name="" id="status" class="form-control" name="status" formControlName="status">
+                <option *ngFor="let item of enumList" [value]="item">{{item}}</option>
+            </select>
+            <!-- <select name="" id="status" class="form-control" formControlName="status">
+        <option value="Orientation scolaire">Orientation scolaire</option>
+        <option value="Certificat de Scolarite">Certificat de Scolarite</option>
+        <option value="Relevés de notes">Relevés de notes</option>
+        <option value="Reçus de paiement">Reçus de paiement</option>
+      </select> -->
+            <!-- <input type="password" class="form-control" formControlName="departement"
+        placeholder="Code Authentification" id="departement"> -->
+            <label for="status">Status*</label>
+        </div>
+
+        <div class="form-floating mb-3 d-none">
+            <input type="file" class="form-control" (change)="onChange($event)" id="pieceJointe" name="pieceJointe">
+            <!-- <label for="pieceJointe">Envoyez une piece jointe </label> -->
+        </div>
+        <div class="btns">
+            <button class="btn btn-success col-md-4" type="submit" id="sub"><span *ngIf="!senddingRequest">Mettre à
+                    jour</span>
+                <div *ngIf="submitting" class="spinner-border text-sucess" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </button>
+            <button type="button" id="cancel" (click)="fermer()"
+                class="btn btn-outline-warning col-md-4">Annuler</button>
+        </div>
+        <!-- <button type="submit" class="btn btn-primary col-md-12 col-sm-12 col-xs-12 "><span>connexion</span>
+      <div class="spinner-border text-sucess" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </button> -->
+    </form>
+</p-dialog>
+<p-toast></p-toast>
