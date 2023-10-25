@@ -81,7 +81,7 @@
                             <div class="col"
                                 *ngIf="interventionItem.status == 'ECHEC' || 'TRAITEE' && interventionItem.status != 'ATTENTE' && interventionItem.status != 'TRAITEMENT'">
                                 <button pButton pRipple class="p-button-rounded mr-1"
-                                    style="background: danger; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: .5em; background: rgb(8, 3, 39); border: none;"
+                                    style="background: danger;  display: flex; align-items: center; justify-content: center; padding: .5em; background: rgb(8, 3, 39); border: none;"
                                     [disabled]="interventionItem.status == 'ECHEC' || interventionItem.status == 'TRAITEE'">
                                     <i class='bx bxs-tired bx-tada'></i>
                                 </button>
@@ -91,7 +91,7 @@
                                     <div class="col" *ngIf="interventionItem.status == 'ATTENTE'">
                                         <button pButton pRipple class="p-button-rounded mr-1"
                                             (click)="demandeTraitement(interventionItem)"
-                                            style="background: danger; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: .5em; background: blue; border: none;"
+                                            style="background: danger;  display: flex; align-items: center; justify-content: center; padding: .5em; background: blue; border: none;"
                                             [disabled]="interventionItem.status == 'ECHEC' || interventionItem.status == 'TRAITEE'">
                                             <div style="display: flex; align-items: center; justify-content: center;"
                                                 *ngIf="!submitting">
@@ -109,7 +109,7 @@
                                                     (click)="demandeTraitee(interventionItem)"
                                                     class="p-button-rounded mr-1 "
                                                     [disabled]="interventionItem.personnel.codePersonnel != this.inToken"
-                                                    style="background: danger; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: .5em; background: green; border: none;">
+                                                    style="background: danger;  display: flex; align-items: center; justify-content: center; padding: .5em; background: green; border: none;">
                                                     <div style="display: flex; align-items: center; justify-content: center;"
                                                         *ngIf="!submitting">
                                                         <i class='bx bx-user-check'></i>
@@ -125,7 +125,7 @@
                                                 <button pButton pRipple class="p-button-rounded mr-1 "
                                                     [disabled]="interventionItem.personnel.codePersonnel != inToken"
                                                     (click)="demandeEchec(interventionItem)"
-                                                    style="background: danger; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: .5em; background: red; border: none;">
+                                                    style="background: danger;  display: flex; align-items: center; justify-content: center; padding: .5em; background: red; border: none;">
                                                     <div style="display: flex; align-items: center; justify-content: center;"
                                                         *ngIf="!submitting">
                                                         <i class='bx bx-user-x'></i>
@@ -143,7 +143,7 @@
                             </div>
                             <div class="col">
                                 <button pButton pRipple class="p-button-rounded mr-1 "
-                                    style="background: danger; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: .5em; background: rgb(0, 195, 255); border: none;"
+                                    style="background: danger; ; display: flex; align-items: center; justify-content: center; padding: .5em; background: rgb(0, 195, 255); border: none;"
                                     (click)="detailsIntervention(interventionItem)">
                                     <i class='bx bx-info-circle bx-tada'></i>
                                 </button>

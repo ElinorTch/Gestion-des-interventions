@@ -53,8 +53,7 @@ export class InterventionAdminComponent implements OnInit {
   detailsIntervention(intervention: any): void {
     this.selectedIntervention = intervention;
     this.interventionDialog = true  
-    console.log(intervention);
-    
+    console.log(intervention); 
   }
 
 
