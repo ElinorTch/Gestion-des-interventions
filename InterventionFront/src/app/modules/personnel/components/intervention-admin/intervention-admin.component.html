@@ -99,7 +99,7 @@
                                             </div>
                                             <div style="display: flex; align-items: center; justify-content: center;"
                                                 *ngIf="submitting">
-                                                <i class='bx bx-dots-horizontal-rounded bx-spin bx-flip-horizontal' ></i>
+                                                <i class='bx bx-dots-horizontal-rounded bx-spin bx-flip-horizontal'></i>
                                             </div>
                                         </button>
                                     </div>
@@ -116,7 +116,8 @@
                                                     </div>
                                                     <div style="display: flex; align-items: center; justify-content: center;"
                                                         *ngIf="submitting">
-                                                        <i class='bx bx-dots-horizontal-rounded bx-spin bx-flip-horizontal' ></i>
+                                                        <i
+                                                            class='bx bx-dots-horizontal-rounded bx-spin bx-flip-horizontal'></i>
                                                     </div>
                                                 </button></div>
                                             <div class="col">
@@ -131,7 +132,8 @@
                                                     </div>
                                                     <div style="display: flex; align-items: center; justify-content: center;"
                                                         *ngIf="submitting">
-                                                        <i class='bx bx-dots-horizontal-rounded bx-spin bx-flip-horizontal' ></i>
+                                                        <i
+                                                            class='bx bx-dots-horizontal-rounded bx-spin bx-flip-horizontal'></i>
                                                     </div>
                                                 </button>
                                             </div>
@@ -143,7 +145,7 @@
                                 <button pButton pRipple class="p-button-rounded mr-1 "
                                     style="background: danger; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: .5em; background: rgb(0, 195, 255); border: none;"
                                     (click)="detailsIntervention(interventionItem)">
-                                    <i class='bx bx-file-find bx-tada'></i>
+                                    <i class='bx bx-info-circle bx-tada'></i>
                                 </button>
                             </div>
                         </div>
@@ -171,10 +173,10 @@
 
 
 <p-confirmDialog [style]="{width: '650px'}"></p-confirmDialog>
-<p-dialog [style]="{width: '750px'}" header=" Details" [(visible)]="interventionDialog" [modal]="true"
+<p-dialog [style]="{width: '750px'}" header=" Details dur l\'intervention" [(visible)]="interventionDialog" [modal]="true"
     [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
     <div style="padding: 1em 2em;">
-        <app-details-inervention></app-details-inervention>
+        <app-details-inervention [intervention]="selectedIntervention"></app-details-inervention>
     </div>
 </p-dialog>
 <p-toast></p-toast>

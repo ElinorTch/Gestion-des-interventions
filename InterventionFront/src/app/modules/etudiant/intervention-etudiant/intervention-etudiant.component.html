@@ -65,14 +65,12 @@
             </ng-template>
             <ng-template pTemplate="body" let-interventionItem>
                 <tr>
-                    <!-- <td>
-                        <p-tableCheckbox [value]="interventionItem"></p-tableCheckbox>
-                    </td> -->
                     <td>{{interventionItem.sousCategorie.libelle}}</td>
                     <td>{{truncateDescription(interventionItem.libelleIntervention)}}</td>
                     <td>
                         <p *ngIf="interventionItem.personnel == null"><i class='bx bx-no-entry'></i></p>
-                        <p *ngIf="interventionItem.personnel != null"><i class='bx bx-user-voice' ></i> {{interventionItem.personnel.nom}} {{interventionItem.personnel.prenom}}</p>
+                        <p *ngIf="interventionItem.personnel != null"><i class='bx bx-user-voice'></i>
+                            {{interventionItem.personnel.nom}} {{interventionItem.personnel.prenom}}</p>
 
                     </td>
                     <td>
@@ -92,7 +90,7 @@
                             (click)="dropIntervention(interventionItem.idDemande, interventionItem.libelleIntervention)">
                         </button> -->
                         <button pButton pRipple icon="bx bx-info-circle" class="p-button-rounded mr-1 p-button-info"
-                            (click)="detailIntervention(interventionItem, $event)"></button>
+                            (click)="detailsIntervention(interventionItem)"></button>
                     </td>
                 </tr>
             </ng-template>
@@ -114,67 +112,48 @@
 
 <p-confirmDialog [style]="{width: '650px'}"></p-confirmDialog>
 <p-dialog [style]="{width: '750px'}"
-    [header]=" isUpdating == true ? 'Modifier '+ this.intervention.nom_intervention.toString().slice(0,15)+'...' : 'Nouvelle intervention'"
+    [header]=" vueDetals == true ? 'Details sur l\'intervention' : 'Nouvelle intervention'"
     [(visible)]="interventionDialog" [modal]="true" [maximizable]="true" [baseZIndex]="10000" [draggable]="false"
     [resizable]="false" class="container">
-    <form class="p-4" enctype="multipart/form-data" [formGroup]="interventionForm"
-        (ngSubmit)="saveIntervention($event)">
-        <!-- <div class="form-floating mb-4 d-none">
-            <input type="text" class="form-control" id="matricule" formControlName="matricule_etudiant"
-                [(ngModel)]="this.inToken">
-            <label for="matricule">Matricule* </label>
-        </div> -->
-        <!-- <div class="form-floating mb-4">
-            <select name="" id="departement" class="form-control" formControlName="departement">
-                <option *ngFor="let item of depart" [value]="item.codeDepartement">{{item.libelleDepartement}}
-                </option>
-            </select>
-            <label for="personnel">Departement*</label>
-        </div> -->
-        <!-- <div class="form-floating mb-4">
-            <select name="" id="personnel" class="form-control" formControlName="codePersonnel">
-                <option *ngFor="let item of personnelList" [value]="item.codePersonnel" >{{item.nom}} {{item.prenom}}
-                </option>
-            </select>
-            <label for="personnel">Personnel*</label>
-        </div> -->
-        <div class="form-floating mb-4">
-            <select name="" id="sousCat" class="form-control" formControlName="sous_categorie">
-                <option *ngFor="let item of sousCategorie" [value]="item.idSousCategorie">{{item.libelle}}</option>
-                <!-- <option value="Orientation scolaire">Orientation scolaire</option>
-                <option value="Certificat de Scolarite">Certificat de Scolarite</option>
-                <option value="Relevés de notes">Relevés de notes</option>
-                <option value="Reçus de paiement">Reçus de paiement</option>
-                <option value="Identifiants de wifi">Identifiants de connexion wifi</option> -->
-            </select>
-            <label for="sousCat">Sous catégorie*</label>
-        </div>
-        <div class="p-float-label mb-4">
-            <textarea name="" formControlName="libelleIntervention" id="description" cols="30" rows="10"
-                placeholder="Entrer une description" class="form-control"></textarea>
-        </div>
-        <div class="form-floating mb-3">
-            <input type="file" class="form-control" (change)="onChange($event)" id="pieceJointe"
-               >
-        </div>
-        <div class="btns">
-            <div class="row">
-                <div class="col-md-6">
-                    <button class="btn btn-success " type="submit" id="sub" style="width: 100%;"
-                        [disabled]="interventionForm.invalid || senddingRequest"><span
-                            *ngIf="!senddingRequest && !submitting">Envoyer</span>
-                        <div *ngIf="submitting" class="spinner-border text-sucess" role="status">
-                            <!-- <span class="sr-only">Loading...</span> -->
-                        </div>
-                    </button>
-                </div>
-                <div class="col-md-6">
-                    <button type="button" id="cancel" (click)="fermer()"
-                        class="btn btn-outline-danger " style="width: 100%;">Annuler</button>
+    <div *ngIf="!vueDetals">
+        <form class="p-4" enctype="multipart/form-data" [formGroup]="interventionForm"
+            (ngSubmit)="saveIntervention($event)">
+            <div class="form-floating mb-4">
+                <select name="" id="sousCat" class="form-control" formControlName="sous_categorie">
+                    <option *ngFor="let item of sousCategorie" [value]="item.idSousCategorie">{{item.libelle}}</option>
+                </select>
+                <label for="sousCat">Sous catégorie*</label>
+            </div>
+            <div class="p-float-label mb-4">
+                <textarea name="" formControlName="libelleIntervention" id="description" cols="30" rows="10"
+                    placeholder="Entrer une description" class="form-control"></textarea>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="file" class="form-control" (change)="onChange($event)" id="pieceJointe">
+            </div>
+            <div class="btns">
+                <div class="row">
+                    <div class="col-md-6">
+                        <button class="btn btn-success " type="submit" id="sub" style="width: 100%;"
+                            [disabled]="interventionForm.invalid || senddingRequest"><span
+                                *ngIf="!senddingRequest && !submitting">Envoyer</span>
+                            <div *ngIf="submitting" class="spinner-border text-sucess" role="status">
+                                <!-- <span class="sr-only">Loading...</span> -->
+                            </div>
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" id="cancel" (click)="fermer()" class="btn btn-outline-danger "
+                            style="width: 100%;">Annuler</button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
+
+    <div style="padding: 1em 2em;" *ngIf="vueDetals">
+        <app-details-inervention [intervention]="selectedIntervention"></app-details-inervention>
+    </div>
 </p-dialog>
 
 <p-toast></p-toast>

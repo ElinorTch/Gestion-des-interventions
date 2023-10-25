@@ -25,6 +25,7 @@ export class InterventionAdminComponent implements OnInit {
   details: any[] = []
   composantVisible = false;
   inToken: any = '202320';
+  selectedIntervention:any
 
   interventionForm = this.formBuilder.group({
     id_intervention: new FormControl(''),
@@ -50,9 +51,10 @@ export class InterventionAdminComponent implements OnInit {
   }
 
   detailsIntervention(intervention: any): void {
-    this.interventionDialog = true;
-    this.isUpdating = true;
-    localStorage.setItem('details', JSON.stringify(intervention))
+    this.selectedIntervention = intervention;
+    this.interventionDialog = true  
+    console.log(intervention);
+    
   }
 
 
@@ -117,7 +119,7 @@ export class InterventionAdminComponent implements OnInit {
 
       setTimeout(() => {
         window.location.reload();
-      }, 3000);
+      }, 1500);
 
     },
       () => {
@@ -126,7 +128,7 @@ export class InterventionAdminComponent implements OnInit {
 
         setTimeout(() => {
           window.location.reload();
-        }, 3000);
+        }, 1500);
 
       }
     )
@@ -145,7 +147,7 @@ export class InterventionAdminComponent implements OnInit {
 
       setTimeout(() => {
         window.location.reload();
-      }, 3000);
+      }, 1500);
 
     },
       () => {
@@ -154,7 +156,7 @@ export class InterventionAdminComponent implements OnInit {
 
         setTimeout(() => {
           window.location.reload();
-        }, 3000);
+        }, 1500);
 
       }
     )
@@ -173,7 +175,7 @@ export class InterventionAdminComponent implements OnInit {
 
       setTimeout(() => {
         window.location.reload();
-      }, 3000);
+      }, 1500);
 
     },
       () => {
@@ -182,14 +184,14 @@ export class InterventionAdminComponent implements OnInit {
 
         setTimeout(() => {
           window.location.reload();
-        }, 3000);
+        }, 1500);
 
       }
     )
   }
 
   getAllIntervention() {
-    this.interventionService.getAllIntervention().subscribe((data: any) => {
+    this.interventionService.getInterventionByPersonnel(this.inToken).subscribe((data: any) => {
       this.isGettingAll = false
       this.messageService.add({
         severity: 'success',

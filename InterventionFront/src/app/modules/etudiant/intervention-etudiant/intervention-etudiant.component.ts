@@ -34,6 +34,8 @@ export class InterventionEtudiantComponent implements OnInit {
   composantVisible = false;
   urlFile: any
   inToken: any = '1920L034';
+  selectedIntervention: any
+  vueDetals = false;
 
 
   interventionForm = this.formBuilder.group({
@@ -68,14 +70,22 @@ export class InterventionEtudiantComponent implements OnInit {
   }
 
   creerIntervention(): void {
+    this.vueDetals = false
     this.interventionDialog = true;
     this.isUpdating = false;
     this.intervention = this.newIntervention;
   }
 
+  detailsIntervention(intervention: any): void {
+    this.vueDetals = true
+    this.selectedIntervention = intervention;
+    this.interventionDialog = true
+
+  }
+
 
   getAllIntervention(): void {
-    this.intervetionService.getAllIntervention().toPromise().then(
+    this.intervetionService.getInterventionByEtudiant(this.inToken).toPromise().then(
       (interventions) => {
         this.interventionList = interventions;
         console.log(this.interventionList);
@@ -185,12 +195,6 @@ export class InterventionEtudiantComponent implements OnInit {
     //     this.messageService.add({ severity: 'error', summary: 'erreur', detail: 'operation annulée', life: 3000 });
     //   }
     // });
-  }
-  detailIntervention(intervention: Intervention, e: Event) {
-    e.stopPropagation();
-    this.intervention = intervention;
-    this.isUpdating = true;
-    this.interventionDialog = true
   }
 
   exportExcel() {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-details-inervention',
@@ -9,6 +9,9 @@ export class DetailsInerventionComponent implements OnInit {
 
   details: any;
   yes: any
+
+  @Input() intervention: any;
+
   constructor() { }
 
   ngOnInit(): void {

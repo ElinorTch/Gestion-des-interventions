@@ -1,22 +1,22 @@
 <div>
     <p>
         <b>Matricule Etudiant : </b>
-        {{details?.etudiant.matricule}}
+        {{intervention.etudiant.matricule}}
     </p>
     <p>
         <b>Nom : </b>
-        {{details?.sousCategorie.libelle}}
+        {{intervention.sousCategorie.libelle}}
     </p>
     <p>
         <b>Description : </b>
-        {{details?.libelleIntervention}}
+        {{intervention.libelleIntervention}}
     </p>
-    <p *ngIf="details?.personnel != null">
+    <p *ngIf="intervention.personnel != null">
         <b>Personnel : </b>
-        {{details?.personnel.nom}} {{details?.personnel.prenom}}
+        {{intervention.personnel.nom}} {{intervention.personnel.prenom}}
     </p>
     <p>
         <b>Status : </b>
-        {{details?.status}}
+        {{intervention.status}}
     </p>
 </div>
