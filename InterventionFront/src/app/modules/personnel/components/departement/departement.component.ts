@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import jwt_decode from 'jwt-decode'
 import { MessageService } from 'primeng/api';
 import { InterventionsService } from 'src/app/services/others/interventions.service';
+import { PersonnelService } from 'src/app/services/others/personnel.service';
 import { Helpers } from 'src/app/shared/helpers/Helpers';
 
 @Component({
@@ -27,19 +28,60 @@ export class DepartementComponent implements OnInit {
   composantVisible = false;
   inToken: any = '';
   token: any
+  codeDepartement: any = ''
+  listeDepartement: any[] = []
   // inToken: any = '202320';
   selectedIntervention: any
 
-  constructor(private messageService: MessageService, private formBuilder: FormBuilder, private interventionService: InterventionsService) {
+  constructor(private messageService: MessageService, private formBuilder: FormBuilder, private interventionService: InterventionsService, private personnelService: PersonnelService) {
     this.token = localStorage.getItem('auth_token');
     const decodedToken = this.decodeToken(this.token);
     this.inToken = decodedToken.id
     console.log("token" + decodedToken);
-    
+
+    this.personnelService.getAllPersonnelId(this.inToken).toPromise().then((data) => {
+      this.codeDepartement = data.departements[0].codeDepartement
+      console.log(data.departements);
+      console.log(this.codeDepartement);
+
+      for (const codes of data.departements) {
+        this.listeDepartement.push(codes.codeDepartement)
+        this.interventionService.getInterventionByDepartement(codes.codeDepartement).subscribe((data: any) => {
+          console.log(this.codeDepartement);
+          this.isGettingAll = false
+          this.messageService.add({
+            severity: 'success',
+            summary: 'succès',
+            detail: 'Les éléments sont tous biens chargés',
+            life: 3000
+          });
+          this.interventionList = data
+          console.log(data);
+
+        },
+          (res: any) => {
+            this.interventionList = [];
+            this.isGettingAll = false;
+            this.messageService.add({
+              severity: 'error',
+              summary: 'erreur',
+              detail: 'erreur du chargement des données veuillez ressayez plustard',
+              life: 3000
+            });
+            console.log(res);
+
+          }
+        )
+      }
+      console.log("liste des departements", this.listeDepartement);
 
 
-    this.getAllIntervention()
+
+
+    })
+    // this.getAllIntervention()
   }
+
 
   ngOnInit(): void {
 
@@ -146,31 +188,32 @@ export class DepartementComponent implements OnInit {
   }
 
   getAllIntervention() {
-    this.interventionService.getAllIntervention().subscribe((data: any) => {
-      this.isGettingAll = false
-      this.messageService.add({
-        severity: 'success',
-        summary: 'succès',
-        detail: 'Les éléments sont tous biens chargés',
-        life: 3000
-      });
-      this.interventionList = data
-      console.log(data);
+    // this.interventionService.getInterventionByDepartement(this.codeDepartement).subscribe((data: any) => {
+    //   console.log(this.codeDepartement);
+    //   this.isGettingAll = false
+    //   this.messageService.add({
+    //     severity: 'success',
+    //     summary: 'succès',
+    //     detail: 'Les éléments sont tous biens chargés',
+    //     life: 3000
+    //   });
+    //   this.interventionList = data
+    //   console.log(data);
 
-    },
-      (res: any) => {
-        this.interventionList = [];
-        this.isGettingAll = false;
-        this.messageService.add({
-          severity: 'error',
-          summary: 'erreur',
-          detail: 'erreur du chargement des données veuillez ressayez plustard',
-          life: 3000
-        });
-        console.log(res);
+    // },
+    //   (res: any) => {
+    //     this.interventionList = [];
+    //     this.isGettingAll = false;
+    //     this.messageService.add({
+    //       severity: 'error',
+    //       summary: 'erreur',
+    //       detail: 'erreur du chargement des données veuillez ressayez plustard',
+    //       life: 3000
+    //     });
+    //     console.log(res);
 
-      }
-    )
+    //   }
+    // )
   }
 
   decodeToken(token: string): any {

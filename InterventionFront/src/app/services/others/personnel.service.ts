@@ -21,4 +21,7 @@ export class PersonnelService {
   getAllPersonnel(): Observable<any> {
     return this.httpClient.get(`${this.rootURL}`, {headers : this.headers})
   }
+  getAllPersonnelId(data:any): Observable<any> {
+    return this.httpClient.get(`${this.rootURL}/${data}`, {headers : this.headers})
+  }
 }
