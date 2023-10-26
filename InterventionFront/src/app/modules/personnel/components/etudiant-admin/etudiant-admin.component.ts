@@ -10,7 +10,7 @@ import { Etudiant } from 'src/app/shared/interfaces/etudiant-interface';
   styleUrls: ['./etudiant-admin.component.scss']
 })
 export class EtudiantAdminComponent implements OnInit {
-  composantVisible = true;
+  composantVisible = false;
 
   etudiantList: Etudiant[] = [];
   isGettingAll = true

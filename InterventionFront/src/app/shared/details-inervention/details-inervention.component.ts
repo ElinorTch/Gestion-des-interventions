@@ -15,10 +15,7 @@ export class DetailsInerventionComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.yes = localStorage.getItem('details')
-    this.details = JSON.parse(this.yes)
-    console.log(this.details);
-
+    
   }
 
 }

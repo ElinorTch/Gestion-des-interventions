@@ -6,6 +6,7 @@
         <div class="links">
             <ul>
                 <li [routerLink] = "['dashboard']"><a [routerLink] = "['dashboard']"class="link">Dashboard</a></li>
+                <li [routerLink] = "['departement']"><a [routerLink] = "['departement']" class="link">Departement</a></li>
                 <li [routerLink] = "['interventions']"><a [routerLink] = "['interventions']" class="link">Interventions</a></li>
                 <li [routerLink] = "['statistiques']"><a [routerLink] = "['statistiques']" class="link">Statistiques</a></li>
                 <li [routerLink] = "['etudiants']"><a [routerLink] = "['etudiants']" class="link">Etudiants</a></li>
@@ -13,5 +14,5 @@
             </ul>
         </div>
     </div>
-    <button>Deconnexion</button>
+    <button (click)="logOut()">Deconnexion</button>
 </aside>

@@ -1,0 +1,173 @@
+<div class="container interventions">
+    <h2>Interventions du département</h2>
+
+    <div class="main-content">
+        <div class="mt-4 mb-3">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="flex">
+                        <button type="button" [disabled]="isGettingAll || this.interventionList.length == 0" pButton
+                            pRipple icon="bx bxs-file-export" (click)="exportExcel()" label="Exporter"
+                            class="p-button-warning mr-2" pTooltip="XLS" style="width: max-content;padding: .5em;"
+                            tooltipPosition="bottom"></button>
+                    </div>
+                </ng-template>
+            </p-toolbar>
+        </div>
+
+        <p-table #dt [rows]="5" [loading]="isGettingAll" [rowHover]="true" [paginator]="true" [value]="interventionList"
+            sortMode="multiple" responsiveLayout="scroll" [resizableColumns]="true" [responsive]="true"
+            currentPageReportTemplate="affiche {first} à {last} sur {totalRecords} entrées"
+            [showCurrentPageReport]="true" [globalFilterFields]="['nom_intervention', 'status' , 'matricule_etudiant']">
+            <ng-template pTemplate="caption">
+                <div class="d-flex p-ai-center justify-content-between">
+                    <h4 class="p-m-0"></h4>
+                    <span class="p-input-icon-left" style="display: flex; align-items: center; width:30%">
+                        <i class="fi fi-br-search"></i>
+                        <input pInputText [(ngModel)]="search" (input)="dt.filterGlobal(search, 'contains')" type="text"
+                            class="form-control" style="padding-left: 50px; " placeholder="Rechercher..." />
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <!-- <th style="width: 3rem">
+                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    </th> -->
+                    <th pSortableColumn="nom_intervention">Nom <p-sortIcon field="nom_intervention"></p-sortIcon>
+                    <th pSortableColumn="description">Description
+                    </th>
+                    <th pSortableColumn="matricule_etudiant">Matricule Etudiant <p-sortIcon
+                            field="matricule_etudiant"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="pieceJointe">Piece Jointe <p-sortIcon field="pieceJointe"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="date">Date Creation <p-sortIcon field="date"></p-sortIcon>
+                    </th>
+                    <th>actions</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-interventionItem>
+                <tr>
+                    <!-- <td>
+                        <p-tableCheckbox [value]="interventionItem"></p-tableCheckbox>
+                    </td> -->
+                    <td>{{interventionItem.sousCategorie.libelle}}</td>
+                    <td>{{truncateDescription(interventionItem.libelleIntervention)}}</td>
+                    <td>{{interventionItem.etudiant.matricule }}</td>
+                    <td>
+                        <p *ngIf="interventionItem.status == this.enumList[0]" class="btn btn-warning">
+                            {{interventionItem.status}}
+                        </p>
+                        <p *ngIf="interventionItem.status == this.enumList[1]" class="btn btn-dark">
+                            {{interventionItem.status}}
+                        </p>
+                        <p *ngIf="interventionItem.status == this.enumList[2]" class="btn btn-success">
+                            {{interventionItem.status}}
+                        </p>
+                        <p *ngIf="interventionItem.status == this.enumList[3]" class="btn btn-danger">
+                            {{interventionItem.status}}
+                        </p>
+                    </td>
+                    <td>
+                        <p *ngIf="interventionItem.pieceJointe">{{interventionItem.pieceJointe}}</p>
+                        <p *ngIf="!interventionItem.pieceJointe">RAS</p>
+                    </td>
+                    <td>{{interventionItem.dateDemande | date : 'YYYY-MM-dd'}}</td>
+                    <td>
+                        <div class="row">
+                            <div class="col"
+                                *ngIf="interventionItem.status == 'ECHEC' || 'TRAITEE' && interventionItem.status != 'ATTENTE' && interventionItem.status != 'TRAITEMENT'">
+                                <button pButton pRipple class="p-button-rounded mr-1"
+                                    style="background: danger;  display: flex; align-items: center; justify-content: center; padding: .5em; background: rgb(8, 3, 39); border: none;"
+                                    [disabled]="interventionItem.status == 'ECHEC' || interventionItem.status == 'TRAITEE'">
+                                    <i class='bx bxs-tired bx-tada'></i>
+                                </button>
+                            </div>
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col" *ngIf="interventionItem.status == 'ATTENTE'">
+                                        <button pButton pRipple class="p-button-rounded mr-1"
+                                            (click)="demandeTraitement(interventionItem)"
+                                            style="background: danger;  display: flex; align-items: center; justify-content: center; padding: .5em; background: blue; border: none;"
+                                            [disabled]="interventionItem.status == 'ECHEC' || interventionItem.status == 'TRAITEE'">
+                                            <div style="display: flex; align-items: center; justify-content: center;"
+                                                *ngIf="!submitting">
+                                                <i class='bx bx-pencil'></i>
+                                            </div>
+                                            <div style="display: flex; align-items: center; justify-content: center;"
+                                                *ngIf="submitting">
+                                                <i class='bx bx-dots-horizontal-rounded bx-spin bx-flip-horizontal'></i>
+                                            </div>
+                                        </button>
+                                    </div>
+                                    <div class="col" *ngIf="interventionItem.status == 'TRAITEMENT'">
+                                        <div class="row">
+                                            <div class="col"><button pButton pRipple
+                                                    (click)="demandeTraitee(interventionItem)"
+                                                    class="p-button-rounded mr-1 "
+                                                    [disabled]="interventionItem.personnel.codePersonnel != this.inToken"
+                                                    style="background: danger;  display: flex; align-items: center; justify-content: center; padding: .5em; background: green; border: none;">
+                                                    <div style="display: flex; align-items: center; justify-content: center;"
+                                                        *ngIf="!submitting">
+                                                        <i class='bx bx-user-check'></i>
+                                                    </div>
+                                                    <div style="display: flex; align-items: center; justify-content: center;"
+                                                        *ngIf="submitting">
+                                                        <i
+                                                            class='bx bx-dots-horizontal-rounded bx-spin bx-flip-horizontal'></i>
+                                                    </div>
+                                                </button></div>
+                                            <div class="col">
+
+                                                <button pButton pRipple class="p-button-rounded mr-1 "
+                                                    [disabled]="interventionItem.personnel.codePersonnel != inToken"
+                                                    (click)="demandeEchec(interventionItem)"
+                                                    style="background: danger;  display: flex; align-items: center; justify-content: center; padding: .5em; background: red; border: none;">
+                                                    <div style="display: flex; align-items: center; justify-content: center;"
+                                                        *ngIf="!submitting">
+                                                        <i class='bx bx-user-x'></i>
+                                                    </div>
+                                                    <div style="display: flex; align-items: center; justify-content: center;"
+                                                        *ngIf="submitting">
+                                                        <i
+                                                            class='bx bx-dots-horizontal-rounded bx-spin bx-flip-horizontal'></i>
+                                                    </div>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <button pButton pRipple class="p-button-rounded mr-1 "
+                                    style="background: danger; ; display: flex; align-items: center; justify-content: center; padding: .5em; background: rgb(0, 195, 255); border: none;"
+                                    (click)="detailsIntervention(interventionItem)">
+                                    <i class='bx bx-info-circle bx-tada'></i>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <ng-template pTemplate="header">
+            <div class="d-flex align-items-center justify-content-between">
+                Il ya au total {{ interventionList ? interventionList.length : 0 }} intervention(s).
+            </div>
+        </ng-template>
+
+    </div>
+</div>
+
+<div *ngIf="composantVisible" class="message">
+    <app-messages></app-messages>
+</div>
+
+<button class="chat" (click)="hidden()">
+    <i class='bx bx-message-rounded-dots'></i>
+</button>
+
+<p-toast></p-toast>

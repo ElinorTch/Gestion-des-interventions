@@ -29,10 +29,9 @@ export class LoginEtudiantComponent implements OnInit {
     }).then((data: any) => {
       this.submitting = false;
       this.messageService.add({
-        icon: 'fi fi-br-check-circle',
         severity: 'success',
-        summary: 'Vous êtes connecté',
-        detail: 'Bienvenue',
+        summary: 'succès',
+        detail: 'Vous êtes connecté',
         life: 3000
       });
       console.log(data);
@@ -42,7 +41,6 @@ export class LoginEtudiantComponent implements OnInit {
       (res) => {
         this.submitting = false;
         this.messageService.add({
-          icon: 'fi fi-br-cross-circle',
           severity: 'error',
           summary: ' Erreur',
           detail: 'Vérifier votre login ou mot de passe',

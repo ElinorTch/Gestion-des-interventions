@@ -6,6 +6,7 @@ import { StatistiqueAdminComponent } from './components/statistique-admin/statis
 import { InterventionAdminComponent } from './components/intervention-admin/intervention-admin.component';
 import { EtudiantAdminComponent } from './components/etudiant-admin/etudiant-admin.component';
 import { PersonnelsAdminComponent } from './components/personnels-admin/personnels-admin.component';
+import { DepartementComponent } from './components/departement/departement.component';
 
 const routes: Routes = [
   {
@@ -32,6 +33,10 @@ const routes: Routes = [
   {
     path: 'personnels',
     component: PersonnelsAdminComponent
+  },
+  {
+    path: 'departement',
+    component: DepartementComponent
   }
 ];
 

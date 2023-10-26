@@ -40,6 +40,7 @@ import { PersonnelsAdminComponent } from './modules/personnel/components/personn
 import { ChartModule } from 'primeng/chart';
 
 import { DetailsInerventionComponent } from './shared/details-inervention/details-inervention.component';
+import { DepartementComponent } from './modules/personnel/components/departement/departement.component';
 
 
 
@@ -49,6 +50,7 @@ import { DetailsInerventionComponent } from './shared/details-inervention/detail
     EtudiantComponent,
     PersonnelComponent,
     PersonnelsAdminComponent,
+    DepartementComponent,
     AuthenticationComponent,
     DashboardAdminComponent,
     InterventionAdminComponent,

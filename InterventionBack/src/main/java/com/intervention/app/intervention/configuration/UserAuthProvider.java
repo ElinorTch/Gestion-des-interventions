@@ -69,7 +69,8 @@ public class UserAuthProvider {
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
                 .withClaim("id", dto.getId())
-                .withClaim("matricule", dto.getLogin())
+                .withClaim("login", dto.getLogin())
+//                .withClaim("departement", dto.getDepartement())
                 .sign(Algorithm.HMAC256(secretKey));
     }
 

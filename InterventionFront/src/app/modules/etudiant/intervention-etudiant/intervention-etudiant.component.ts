@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MessageService } from 'primeng/api';
 import { DepartementService } from 'src/app/services/others/departement.service';
@@ -9,6 +9,7 @@ import { SousCategorieService } from 'src/app/services/others/sous-categorie.ser
 import { Helpers } from 'src/app/shared/helpers/Helpers';
 import { FileHandle } from 'src/app/shared/interfaces/file-handle';
 import { Intervention } from 'src/app/shared/interfaces/intervention-interface';
+import jwt_decode from 'jwt-decode'
 
 @Component({
   selector: 'app-intervention-etudiant',
@@ -33,24 +34,38 @@ export class InterventionEtudiantComponent implements OnInit {
   selectedFile: any;
   composantVisible = false;
   urlFile: any
-  inToken: any = '1920L034';
+  inToken: any;
+  codeToken: any;
+  decodedToken: any;
+  // inToken: any = '1920L034';
+  token: any
   selectedIntervention: any
   vueDetals = false;
+  interventionForm: FormGroup
 
 
-  interventionForm = this.formBuilder.group({
-    sous_categorie: new FormControl('', [Validators.required]),
-    matricule_etudiant: new FormControl(this.inToken, [Validators.required]),
-    // status: new FormControl('', [Validators.required]),
-    // login_utilisateur: new FormControl('', [Validators.required]),
-    libelleIntervention: new FormControl('Aucune description', [Validators.required]),
-    // pieceJointe: new FormControl(''),
-  })
+
 
   sousCategorie: any[] = []
   depart: any[] = []
 
-  constructor(private messageService: MessageService, private formBuilder: FormBuilder, private sanitizer: DomSanitizer, private intervetionService: InterventionsService, private personnelService: PersonnelService, private sousCat: SousCategorieService, private departementService: DepartementService) { }
+  constructor(private messageService: MessageService, private formBuilder: FormBuilder, private sanitizer: DomSanitizer, private intervetionService: InterventionsService, private personnelService: PersonnelService, private sousCat: SousCategorieService, private departementService: DepartementService) {
+    this.token = localStorage.getItem('auth_token');
+    this.decodedToken = this.decodeToken(this.token);
+    this.inToken = this.decodedToken.matricule
+    this.codeToken = this.decodedToken.id
+
+    this.interventionForm = this.formBuilder.group({
+      sous_categorie: new FormControl('', [Validators.required]),
+      matricule_etudiant: new FormControl(this.inToken, [Validators.required]),
+      // status: new FormControl('', [Validators.required]),
+      // login_utilisateur: new FormControl('', [Validators.required]),
+      libelleIntervention: new FormControl('Aucune description', [Validators.required]),
+      // pieceJointe: new FormControl(''),
+    })
+
+
+  }
 
   hidden() {
     this.composantVisible = !this.composantVisible
@@ -89,7 +104,6 @@ export class InterventionEtudiantComponent implements OnInit {
       (interventions) => {
         this.interventionList = interventions;
         console.log(this.interventionList);
-
         this.isGettingAll = false;
         this.messageService.add({
           severity: 'success',
@@ -144,8 +158,9 @@ export class InterventionEtudiantComponent implements OnInit {
 
   saveIntervention(e: Event): void {
     console.log(this.interventionForm.value);
+    console.log(this.inToken);
     this.submitting = true
-    this.intervetionService.saveIntervention(this.interventionForm.value, this.interventionForm.value.sous_categorie, this.interventionForm.value.matricule_etudiant).toPromise().then((data) => {
+    this.intervetionService.saveIntervention(this.interventionForm.value, this.interventionForm.value.sous_categorie, this.inToken).subscribe((data) => {
       console.log(data);
       this.interventionList.push(data);
       this.messageService.add({
@@ -164,7 +179,7 @@ export class InterventionEtudiantComponent implements OnInit {
         this.senddingRequest = false;
         this.interventionDialog = false
         // tslint:disable-next-line:max-line-length
-        this.messageService.add({ severity: 'error', summary: 'erreur', detail: 'erreur lors de la creation de l\'intervention', life: 3000 });
+        this.messageService.add({ severity: 'info', summary: 'En Cours', detail: 'En cours de creation de l\'intervention', life: 3000 });
         window.location.reload()
       }
     )
@@ -223,6 +238,16 @@ export class InterventionEtudiantComponent implements OnInit {
     this.getAllIntervention()
     this.getAllSousCat()
     // this.getAllDepart()
+  }
+
+
+  decodeToken(token: string): any {
+    try {
+      return jwt_decode(token);
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      return null;
+    }
   }
 
   truncateDescription(description: string | null, length: number = 30): string {

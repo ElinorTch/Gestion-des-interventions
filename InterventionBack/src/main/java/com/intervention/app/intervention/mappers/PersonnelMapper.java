@@ -10,5 +10,6 @@ public interface PersonnelMapper {
 
     @Mapping(source = "codePersonnel", target = "id")
     @Mapping(source = "login", target = "login")
+//    @Mapping(source = "departements", target = "departement")
     PersonnelDto topersonnelDto(Personnel personnel);
 }
