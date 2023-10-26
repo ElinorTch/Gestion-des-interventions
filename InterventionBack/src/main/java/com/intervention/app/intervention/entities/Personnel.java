@@ -11,8 +11,9 @@ import lombok.ToString;
 import org.springframework.web.servlet.function.ServerRequest;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.List;import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Data
 @Entity
 @AllArgsConstructor
