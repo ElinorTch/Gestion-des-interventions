@@ -23,6 +23,12 @@ public class PersonnelController {
         return new ResponseEntity<>(utilisateurs, HttpStatus.OK);
     }
 
+    @GetMapping("/{codePersonnel}")
+    public ResponseEntity<Personnel> getPersonnelByCode(@PathVariable("codePersonnel") Long codePersonnel) {
+        Personnel personnel = personnelService.getPersonnelById(codePersonnel);
+        return new ResponseEntity<>(personnel, HttpStatus.OK);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<Personnel> loginUser(@RequestBody Personnel userData) {
         Personnel userDb = personnelService.getPersonnel(userData.getLogin());
