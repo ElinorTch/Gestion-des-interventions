@@ -17,17 +17,17 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class SecurityConfig {
 
     private final UserAuthProvider userAuthProvider;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtAuthFilter(userAuthProvider), BasicAuthenticationFilter.class)
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests((requests) ->
-                        requests.requestMatchers(HttpMethod.POST, "/login/Etudiant").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/login/Personnel").permitAll()
-                                .requestMatchers("/**").permitAll()
-                                .anyRequest().authenticated()
-
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers(HttpMethod.POST, "/login/Etudiant").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/login/Personnel").permitAll()
+                        .requestMatchers("/**").permitAll()
+                        .anyRequest().authenticated()
                 );
         return http.build();
     }

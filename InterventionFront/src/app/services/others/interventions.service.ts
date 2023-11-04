@@ -40,12 +40,14 @@ export class InterventionsService {
     return this.httpClient.get<any>(`${this.rootURL}/status/${code}`, {headers : this.headers})
   }
 
-  saveIntervention(data: any, idSousCategorie:any, matricule:any): Observable<any> {
+  saveIntervention(data: FormData, idSousCategorie:any, matricule:any): Observable<any> {
     return this.httpClient.post(`${this.rootURL}/save/${idSousCategorie}/${matricule}`, data, {headers : this.headers})
   }
 
   prendreEnCharge(data: any, status: any, idDemande: any, codePersonnel: any) {
     return this.httpClient.put(`${this.rootURL}/update/${status}/${idDemande}/${codePersonnel}`, data, {headers : this.headers})
   }
+
+  
 
 }

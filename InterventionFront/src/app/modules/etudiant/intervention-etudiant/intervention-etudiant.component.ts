@@ -42,7 +42,7 @@ export class InterventionEtudiantComponent implements OnInit {
   selectedIntervention: any
   vueDetals = false;
   interventionForm: FormGroup
-
+  files : File[] = [];
 
 
 
@@ -61,7 +61,7 @@ export class InterventionEtudiantComponent implements OnInit {
       // status: new FormControl('', [Validators.required]),
       // login_utilisateur: new FormControl('', [Validators.required]),
       libelleIntervention: new FormControl('Aucune description', [Validators.required]),
-      // pieceJointe: new FormControl(''),
+      file: new FormControl(),
     })
 
 
@@ -173,14 +173,14 @@ export class InterventionEtudiantComponent implements OnInit {
       this.senddingRequest = false
       this.interventionDialog = false
       this.submitting = false
-      window.location.reload()
+      // window.location.reload()
     },
       (res) => {
         this.senddingRequest = false;
         this.interventionDialog = false
         // tslint:disable-next-line:max-line-length
         this.messageService.add({ severity: 'info', summary: 'En Cours', detail: 'En cours de creation de l\'intervention', life: 3000 });
-        window.location.reload()
+        // window.location.reload()
       }
     )
 
@@ -259,4 +259,49 @@ export class InterventionEtudiantComponent implements OnInit {
     }
     return description;
   }
+
+
+  saveInterventionFormData() {
+    const formData = new FormData();
+    for (const file of this.files) {
+      formData.append('file', file, file.name);
+    }
+    formData.append('sous_categorie', this.interventionForm.get("sous_categorie")?.value);
+    formData.append('matricule_etudiant', this.interventionForm.get("matricule_etudiant")?.value);
+    formData.append('libelleIntervention', this.interventionForm.get("libelleIntervention")?.value);
+
+    this.intervetionService.saveIntervention(formData, this.interventionForm.value.sous_categorie, this.inToken).subscribe((data) => {
+      console.log(data);
+      this.interventionList.push(data);
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Confirmer',
+        detail: `Intervention ajoutée avec success !`,
+        life: 3000
+      });
+      this.interventionForm.reset;
+      this.senddingRequest = false
+      this.interventionDialog = false
+      this.submitting = false
+      // window.location.reload()
+    },
+      (res) => {
+        this.senddingRequest = false;
+        this.interventionDialog = false
+        // tslint:disable-next-line:max-line-length
+        this.messageService.add({ severity: 'info', summary: 'En Cours', detail: 'En cours de creation de l\'intervention', life: 3000 });
+        // window.location.reload()
+      }
+    )
+    console.log(formData.get('sous_categorie'))
+  }
+
+  onFileSelect(event : any): void {
+    console.log(event.target.files)
+    if (event.target.files.length > 0) {
+      this.files = event.target.files;
+      this.interventionForm.get('file')?.setValue(this.files);
+    }
+  }
+
 }
