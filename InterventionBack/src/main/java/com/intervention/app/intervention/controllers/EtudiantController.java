@@ -1,6 +1,7 @@
 package com.intervention.app.intervention.controllers;
 
 import com.intervention.app.intervention.entities.Etudiant;
+import com.intervention.app.intervention.entities.Personnel;
 import com.intervention.app.intervention.services.EtudiantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,12 @@ public class EtudiantController {
     @GetMapping
     public ResponseEntity<List<Etudiant>> getAllEtudiant() {
         return new ResponseEntity<>(etudiantService.getAllEtudiant(), HttpStatus.OK);
+    }
+    //getEtudiant by matricule
+    @GetMapping("/{matricule}")
+    public ResponseEntity<Etudiant> getEtudiantByMatricule(@PathVariable("matricule") String matricule) {
+        Etudiant etudiant = etudiantService.getEtudiantByMatricule(matricule);
+        return new ResponseEntity<>(etudiant, HttpStatus.OK);
     }
 
     /** PostMapping */

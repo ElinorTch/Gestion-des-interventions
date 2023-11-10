@@ -11,15 +11,18 @@ export class EtudiantService {
 
   rootURL = `${environment.api}etudiant`;
 
-  constructor(private httpClient : HttpClient, private axios: AxiosService) { }
+  constructor(private httpClient: HttpClient, private axios: AxiosService) { }
 
-  token : string | any = this.axios.getAuthToken()
+  token: string | any = this.axios.getAuthToken()
 
   headers = new HttpHeaders({
     'Authorization': 'Bearer ' + this.token
   });
 
-  getAllEtudiant(): Observable<any>{
-    return this.httpClient.get(`${this.rootURL}`, {headers : this.headers})
+  getAllEtudiant(): Observable<any> {
+    return this.httpClient.get(`${this.rootURL}`)
+  }
+  getEtudiantByMatricule(matricule: any): Observable<any> {
+    return this.httpClient.get(`${this.rootURL}/${matricule}`)
   }
 }
