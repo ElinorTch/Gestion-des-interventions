@@ -48,6 +48,4 @@ export class InterventionsService {
     return this.httpClient.put(`${this.rootURL}/update/${status}/${idDemande}/${codePersonnel}`, data, {headers : this.headers})
   }
 
-  
-
 }

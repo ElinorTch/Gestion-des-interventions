@@ -113,4 +113,13 @@ public class InterventionController {
     ) {
         interventionService.update(idDemande, status, codePersonnel);
     }
+
+    @PutMapping("/update/{idDemande}")
+    public void termineeIntervention(
+            @PathVariable("idDemande") Long idDemande,
+            @RequestParam("libelleMail") String libelleMail,
+            @RequestParam("file") List<MultipartFile> multipartFileList
+    ) throws IOException {
+        interventionService.termineIntervention(idDemande, libelleMail, multipartFileList);
+    }
 }

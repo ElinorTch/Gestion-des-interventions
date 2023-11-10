@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class SousCategorieService {
@@ -18,5 +19,12 @@ public class SousCategorieService {
 
     public List<SousCategorie> getAllSousCategorie() {
         return sousCategorieRepository.findAll();
+    }
+
+    public List<SousCategorie> getAllSousCategorieByIdCategorie(Long idCategorie) {
+        List<SousCategorie> sousCategories = this.getAllSousCategorie();
+        return sousCategories.stream()
+                .filter(sousCategorie -> Objects.equals(sousCategorie.getCategorie().getIdCategorie(), idCategorie))
+                .toList();
     }
 }

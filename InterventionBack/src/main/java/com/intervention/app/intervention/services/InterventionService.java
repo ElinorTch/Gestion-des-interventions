@@ -135,6 +135,34 @@ public class InterventionService {
         }
     }
 
+    public void termineIntervention(Long idDemande, String text, List<MultipartFile> multipartFileList) throws IOException {
+        try {
+            Intervention intervention = this.getInterventionById(idDemande);
+            System.out.println("First : " + intervention);
+            intervention.setStatus("TRAITEE");
+
+            System.out.println("Modified : " + intervention);
+//            interventionRepository.save(intervention);
+
+            try {
+                emailService.sendMailWithAttachment(
+                        intervention.getEtudiant().getCandidat().getEmail(),
+                        "Gestion des interventions IUSJ",
+                        text +
+                                "Statut de l'intervention: TRAITEE",
+                        intervention,
+                        multipartFileList
+                );
+            } catch (Exception e) {
+                System.out.println("Erreur dans l'envoie de l'email");
+                System.out.println(e);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     public Intervention getInterventionById(Long idDemande) {
         return interventionRepository.findByIdDemande(idDemande);
     }

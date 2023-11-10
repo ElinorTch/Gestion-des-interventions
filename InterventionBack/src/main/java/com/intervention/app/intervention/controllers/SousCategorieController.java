@@ -5,10 +5,7 @@ import com.intervention.app.intervention.services.SousCategorieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +20,10 @@ public class SousCategorieController {
     @GetMapping
     public ResponseEntity<List<SousCategorie>> getAllSousCategorie() {
         return new ResponseEntity<>(sousCategorieService.getAllSousCategorie(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{idCategorie}")
+    public List<SousCategorie> getAllSousCategorie(@PathVariable("idCategorie") Long idCategorie) {
+        return sousCategorieService.getAllSousCategorieByIdCategorie(idCategorie);
     }
 }
