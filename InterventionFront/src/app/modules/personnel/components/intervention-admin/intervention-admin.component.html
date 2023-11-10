@@ -75,7 +75,7 @@
                         <p *ngIf="interventionItem.pieceJointe">{{interventionItem.pieceJointe}}</p>
                         <p *ngIf="!interventionItem.pieceJointe">RAS</p>
                     </td>
-                    <td>{{interventionItem.dateDemande | date : 'YYYY-MM-dd'}}</td>
+                    <td>{{interventionItem.dateDemande | date : 'YYYY-MM-dd, h:mm:a'}}</td>
                     <td>
                         <div class="row">
                             <div class="col"
