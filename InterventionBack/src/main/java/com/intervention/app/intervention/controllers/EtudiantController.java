@@ -20,8 +20,7 @@ public class EtudiantController {
     /** GetMapping */
     @GetMapping
     public ResponseEntity<List<Etudiant>> getAllEtudiant() {
-        List<Etudiant> students = etudiantService.getAllEtudiant();
-        return new ResponseEntity<>(students, HttpStatus.OK);
+        return new ResponseEntity<>(etudiantService.getAllEtudiant(), HttpStatus.OK);
     }
 
     /** PostMapping */

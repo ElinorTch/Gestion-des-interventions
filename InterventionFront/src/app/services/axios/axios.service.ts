@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment.prod';
 
 export class AxiosService {
 
-  constructor() { 
+  constructor() {
     axios.defaults.baseURL = environment.api
     axios.defaults.headers.post["Content-Type"] = "application/json"
   }

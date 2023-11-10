@@ -2,13 +2,31 @@ package com.intervention.app.intervention.controllers;
 
 import com.intervention.app.intervention.entities.*;
 import com.intervention.app.intervention.services.*;
+import com.sun.tools.jconsole.JConsoleContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.swing.tree.ExpandVetoException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.net.URLDecoder;
+import java.util.Objects;
+
+import static java.nio.file.Files.copy;
+import static java.nio.file.Paths.get;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -36,7 +54,12 @@ public class InterventionController {
     @Autowired
     CandidatService candidatService;
 
-    /** GetMapping */
+    @Autowired
+    AttachmentService attachmentService;
+
+    /**
+     * GetMapping
+     */
     @GetMapping
     public ResponseEntity<List<Intervention>> getAllIntervention() {
         List<Intervention> interventions = interventionService.getAllIntervention();
@@ -55,62 +78,48 @@ public class InterventionController {
         return new ResponseEntity<>(interventions, HttpStatus.OK);
     }
 
-
     @GetMapping("/personnel/{code}")
     public ResponseEntity<List<Intervention>> getInterventionByPersonnel(@PathVariable("code") Long code) {
         List<Intervention> interventions = interventionService.getInterventionByPersonnel(code);
         return new ResponseEntity<>(interventions, HttpStatus.OK);
     }
 
-    /** PostMapping */
-    @PostMapping("/save/{idSousCategorie}/{matricule}")
-    public ResponseEntity<String> saveIntervention(@RequestBody Intervention intervention, @PathVariable("idSousCategorie") Long idSousCategorie, @PathVariable("matricule") String matricule) {
+    /**
+     * PostMapping
+     */
+    @PostMapping(value = "/save/{idSousCategorie}/{matricule}")
+    public ResponseEntity<String> saveIntervention(
+            @PathVariable("idSousCategorie") Long idSousCategorie,
+            @PathVariable("matricule") String matricule,
+            @RequestParam("file") List<MultipartFile> multipartFileList,
+            @RequestParam("libelleIntervention") String libelleIntervention
+    ) {
         try {
-            System.out.println("Request body: " + intervention);
-            Etudiant etudiant = etudiantService.getEtudiantByMatricule(matricule);
-            SousCategorie sousCategorie = sousCategorieService.getSousCategorieById(idSousCategorie);
-            intervention.setEtudiant(etudiant);
-            intervention.setSousCategorie(sousCategorie);
-            intervention.setStatus("ATTENTE");
-            System.out.println("Intervention modifie: " + intervention);
-            interventionService.save(intervention);
+            interventionService.save(idSousCategorie, matricule, multipartFileList, libelleIntervention);
             return new ResponseEntity<>("Good", HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println(e);
-            return new ResponseEntity<>("Bad", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Bas", HttpStatus.BAD_REQUEST);
         }
     }
 
-    /** PutMapping */
+    /**
+     * PutMapping
+     */
     @PutMapping("/update/{status}/{idDemande}/{codePersonnel}")
-    public void updateInterventionStatus(@PathVariable("idDemande") Long idDemande,
-                                         @PathVariable("status") String status,
-                                         @PathVariable("codePersonnel") Long codePersonnel)
-    {
-        try {
-            Intervention intervention = interventionService.getInterventionById(idDemande);
-            System.out.println("First : " + intervention);
-            intervention.setStatus(status);
-            Personnel personnel = personnelService.getPersonnelById(codePersonnel);
-            intervention.setPersonnel(personnel);
-            System.out.println("Modified : " + intervention);
-            interventionService.save(intervention);
+    public void updateInterventionStatus(
+            @PathVariable("idDemande") Long idDemande,
+            @PathVariable("status") String status,
+            @PathVariable("codePersonnel") Long codePersonnel
+    ) {
+        interventionService.update(idDemande, status, codePersonnel);
+    }
 
-            try {
-                emailService.sendEmail(
-                        intervention.getEtudiant().getCandidat().getEmail(),
-                        "Gestion des interventions IUSJ",
-                        "Votre demande d'intervention: "+ intervention.getLibelleIntervention() +" a été pris en charge par "
-                                + personnel.getNom() +".\n" +
-                                "Statut de l'intervention: "+ status,
-                        intervention
-                );
-            } catch (Exception e) {
-                System.out.println("Erreur dans l'envoie de l'email");
-            }
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+    @PutMapping("/update/{idDemande}")
+    public void termineeIntervention(
+            @PathVariable("idDemande") Long idDemande,
+            @RequestParam("libelleMail") String libelleMail,
+            @RequestParam("file") List<MultipartFile> multipartFileList
+    ) throws IOException {
+        interventionService.termineIntervention(idDemande, libelleMail, multipartFileList);
     }
 }

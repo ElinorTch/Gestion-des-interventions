@@ -44,7 +44,6 @@ public class Intervention implements Serializable {
     @JoinColumn(name = "idSousCategorie")
     private SousCategorie sousCategorie;
 
-    @JsonBackReference
     @ToString.Exclude
     @OneToMany(mappedBy = "intervention")
     private List<PieceJointe> pieceJointe;
@@ -52,4 +51,6 @@ public class Intervention implements Serializable {
     @ToString.Exclude
     @OneToMany(mappedBy = "intervention")
     private List<Mail> mail;
+
+    private String url;
 }

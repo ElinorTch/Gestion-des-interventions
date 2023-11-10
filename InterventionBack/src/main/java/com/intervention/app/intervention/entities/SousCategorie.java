@@ -17,15 +17,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "sousCategorie")
-//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "jsonIdentifier")
 public class SousCategorie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idSousCategorie")
     private Long idSousCategorie;
-
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long jsonIdentifier;
 
     private String libelle;
 

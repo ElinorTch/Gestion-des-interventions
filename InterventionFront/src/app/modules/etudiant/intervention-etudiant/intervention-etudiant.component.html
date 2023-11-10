@@ -116,7 +116,7 @@
     [(visible)]="interventionDialog" [modal]="true" [maximizable]="true" [baseZIndex]="10000" [draggable]="false"
     [resizable]="false" class="container">
     <div *ngIf="!vueDetals">
-        <form class="p-4" enctype="multipart/form-data" [formGroup]="interventionForm"
+        <!-- <form class="p-4" enctype="multipart/form-data" [formGroup]="interventionForm"
             (ngSubmit)="saveIntervention($event)">
             <div class="form-floating mb-4">
                 <select name="" id="sousCat" class="form-control" formControlName="sous_categorie">
@@ -129,7 +129,41 @@
                     placeholder="Entrer une description" class="form-control"></textarea>
             </div>
             <div class="form-floating mb-3">
-                <input type="file" class="form-control" (change)="onChange($event)" id="pieceJointe">
+                <input type="file" class="form-control" formControlName="url" (change)="onChange($event)" id="pieceJointe">
+            </div>
+            <div class="btns">
+                <div class="row">
+                    <div class="col-md-6">
+                        <button class="btn btn-success " type="submit" id="sub" style="width: 100%;"
+                            [disabled]="interventionForm.invalid || senddingRequest"><span
+                                *ngIf="!senddingRequest && !submitting">Envoyer</span>
+                            <div *ngIf="submitting" class="spinner-border text-sucess" role="status"> -->
+                                <!-- <span class="sr-only">Loading...</span> -->
+                            <!-- </div>
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="button" id="cancel" (click)="fermer()" class="btn btn-outline-danger "
+                            style="width: 100%;">Annuler</button>
+                    </div>
+                </div>
+            </div> -->
+        <!-- </form> -->
+        <!-- FormData -->
+        <form class="p-4" enctype="multipart/form-data" [formGroup]="interventionForm"
+            (ngSubmit)="saveInterventionFormData()">
+            <div class="form-floating mb-4">
+                <select name="" id="sousCat" class="form-control" formControlName="sous_categorie">
+                    <option *ngFor="let item of sousCategorie" [value]="item.idSousCategorie">{{item.libelle}}</option>
+                </select>
+                <label for="sousCat">Sous catégorie*</label>
+            </div>
+            <div class="p-float-label mb-4">
+                <textarea name="" formControlName="libelleIntervention" id="description" cols="30" rows="10"
+                    placeholder="Entrer une description" class="form-control"></textarea>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="file" class="form-control" (change)="onFileSelect($event)" multiple id="pieceJointe">
             </div>
             <div class="btns">
                 <div class="row">
