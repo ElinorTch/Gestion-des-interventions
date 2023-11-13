@@ -159,9 +159,8 @@ export class InterventionEtudiantComponent implements OnInit {
   }
 
   saveIntervention(e: Event): void {
-    console.log("formulaire : ", this.interventionForm.value);
-    // console.log(this.inToken);
-    console.log(this.codeToken);
+    console.log("formulaire : ", this.interventionForm.value.sous_categorie);
+    console.log("matricule etudiant", this.inToken);
 
     this.submitting = true
     this.intervetionService.saveIntervention(this.interventionForm.value, this.interventionForm.value.sous_categorie, this.inToken).subscribe((data) => {
