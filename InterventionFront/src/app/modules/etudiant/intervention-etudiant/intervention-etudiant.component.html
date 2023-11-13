@@ -138,8 +138,8 @@
                             [disabled]="interventionForm.invalid || senddingRequest"><span
                                 *ngIf="!senddingRequest && !submitting">Envoyer</span>
                             <div *ngIf="submitting" class="spinner-border text-sucess" role="status"> -->
-                                <!-- <span class="sr-only">Loading...</span> -->
-                            <!-- </div>
+        <!-- <span class="sr-only">Loading...</span> -->
+        <!-- </div>
                         </button>
                     </div>
                     <div class="col-md-6">
@@ -153,10 +153,18 @@
         <form class="p-4" enctype="multipart/form-data" [formGroup]="interventionForm"
             (ngSubmit)="saveInterventionFormData()">
             <div class="form-floating mb-4">
-                <select name="" id="sousCat" class="form-control" formControlName="sous_categorie">
+                <select name="" id="sousCat" class="form-control" formControlName="sous_categorie"
+                    [(ngModel)]="selectSousCat">
                     <option *ngFor="let item of sousCategorie" [value]="item.idSousCategorie">{{item.libelle}}</option>
                 </select>
                 <label for="sousCat">Sous catégorie*</label>
+            </div>
+            <div class="form-floating mb-4" [ariaDisabled]="selectSousCat == null">
+                <select name="" id="depart" class="form-control" >
+                    <option *ngFor="let item of depart" [value]="item.codeDepartement">{{item.libelleDepartement}}
+                    </option>
+                </select>
+                <label for="depart">Departement*</label>
             </div>
             <div class="p-float-label mb-4">
                 <textarea name="" formControlName="libelleIntervention" id="description" cols="30" rows="10"

@@ -42,7 +42,8 @@ export class InterventionEtudiantComponent implements OnInit {
   selectedIntervention: any
   vueDetals = false;
   interventionForm: FormGroup
-  files : File[] = [];
+  files: File[] = [];
+  selectSousCat: any
 
 
 
@@ -57,6 +58,7 @@ export class InterventionEtudiantComponent implements OnInit {
 
     this.interventionForm = this.formBuilder.group({
       sous_categorie: new FormControl('', [Validators.required]),
+      // departement: new FormControl('', [Validators.required]),
       matricule_etudiant: new FormControl(this.inToken, [Validators.required]),
       // status: new FormControl('', [Validators.required]),
       // login_utilisateur: new FormControl('', [Validators.required]),
@@ -145,20 +147,22 @@ export class InterventionEtudiantComponent implements OnInit {
       }
     );
   }
-  // getAllDepart() {
-  //   this.departementService.getAllDepartement().toPromise().then(
-  //     (dep) => {
-  //       this.depart = dep;
-  //       this.isGettingAll = false;
-  //       console.log(dep);
+  getAllDepart() {
+    this.departementService.getAllDepartement().toPromise().then(
+      (dep) => {
+        this.depart = dep;
+        this.isGettingAll = false;
+        console.log(dep);
 
-  //     }
-  //   );
-  // }
+      }
+    );
+  }
 
   saveIntervention(e: Event): void {
-    console.log(this.interventionForm.value);
-    console.log(this.inToken);
+    console.log("formulaire : ", this.interventionForm.value);
+    // console.log(this.inToken);
+    console.log(this.codeToken);
+
     this.submitting = true
     this.intervetionService.saveIntervention(this.interventionForm.value, this.interventionForm.value.sous_categorie, this.inToken).subscribe((data) => {
       console.log(data);
@@ -173,14 +177,13 @@ export class InterventionEtudiantComponent implements OnInit {
       this.senddingRequest = false
       this.interventionDialog = false
       this.submitting = false
-      // window.location.reload()
+      window.location.reload()
     },
       (res) => {
         this.senddingRequest = false;
         this.interventionDialog = false
-        // tslint:disable-next-line:max-line-length
         this.messageService.add({ severity: 'info', summary: 'En Cours', detail: 'En cours de creation de l\'intervention', life: 3000 });
-        // window.location.reload()
+        window.location.reload()
       }
     )
 
@@ -237,7 +240,9 @@ export class InterventionEtudiantComponent implements OnInit {
     // this.getAllPersonnel()
     this.getAllIntervention()
     this.getAllSousCat()
-    // this.getAllDepart()
+    this.getAllDepart()
+    console.log("selectionner : ", this.selectSousCat);
+
   }
 
 
@@ -296,7 +301,7 @@ export class InterventionEtudiantComponent implements OnInit {
     console.log(formData.get('sous_categorie'))
   }
 
-  onFileSelect(event : any): void {
+  onFileSelect(event: any): void {
     console.log(event.target.files)
     if (event.target.files.length > 0) {
       this.files = event.target.files;
