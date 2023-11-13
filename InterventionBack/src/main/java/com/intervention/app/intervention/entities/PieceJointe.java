@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Data
 @Entity
@@ -26,4 +28,14 @@ public class PieceJointe {
     @JsonIgnore
     @JoinColumn(name = "idDemande")
     private Intervention intervention;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "idMailTemp")
+    private MailTemp mailTemp;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "idMail")
+    private Mail mail;
 }

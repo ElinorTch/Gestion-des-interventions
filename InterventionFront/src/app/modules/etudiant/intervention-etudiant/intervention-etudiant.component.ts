@@ -270,6 +270,9 @@ export class InterventionEtudiantComponent implements OnInit {
     formData.append('matricule_etudiant', this.interventionForm.get("matricule_etudiant")?.value);
     formData.append('libelleIntervention', this.interventionForm.get("libelleIntervention")?.value);
 
+    console.log("FormData : ", formData);
+
+
     this.intervetionService.saveIntervention(formData, this.interventionForm.value.sous_categorie, this.inToken).subscribe((data) => {
       console.log(data);
       this.interventionList.push(data);

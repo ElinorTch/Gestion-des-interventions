@@ -82,7 +82,7 @@ public class InterventionService {
             String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
             Path fileStorage = get(DIRECTORY, filename).toAbsolutePath().normalize();
             copy(file.getInputStream(), fileStorage, REPLACE_EXISTING);
-            PieceJointe pieceJointe = new PieceJointe(null, filename, intervention);
+            PieceJointe pieceJointe = new PieceJointe(null, filename, intervention, null, null);
             pieceJointes.add(pieceJointe);
         }
 
@@ -142,7 +142,7 @@ public class InterventionService {
             intervention.setStatus("TRAITEE");
 
             System.out.println("Modified : " + intervention);
-//            interventionRepository.save(intervention);
+            interventionRepository.save(intervention);
 
             try {
                 emailService.sendMailWithAttachment(
@@ -151,7 +151,8 @@ public class InterventionService {
                         text +
                                 "Statut de l'intervention: TRAITEE",
                         intervention,
-                        multipartFileList
+                        multipartFileList,
+                        null
                 );
             } catch (Exception e) {
                 System.out.println("Erreur dans l'envoie de l'email");
