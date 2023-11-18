@@ -10,15 +10,19 @@ import { AxiosService } from '../axios/axios.service';
 export class SousCategorieService {
 
   rootURL = `${environment.api}sousCategorie`;
-  constructor(private httpClient : HttpClient, private axios: AxiosService) { }
+  constructor(private httpClient: HttpClient, private axios: AxiosService) { }
 
-  token : string | any = this.axios.getAuthToken()
+  token: string | any = this.axios.getAuthToken()
 
   headers = new HttpHeaders({
     'Authorization': 'Bearer ' + this.token
   });
 
-  getAllsousCategorie(): Observable<any>{
-    return this.httpClient.get(`${this.rootURL}`, {headers: this.headers})
+  getAllsousCategorie(): Observable<any> {
+    return this.httpClient.get(`${this.rootURL}`, { headers: this.headers })
+  }
+
+  getSousCatById(selectedId: any): Observable<any> {
+    return this.httpClient.get(`${this.rootURL}/${selectedId}`)
   }
 }

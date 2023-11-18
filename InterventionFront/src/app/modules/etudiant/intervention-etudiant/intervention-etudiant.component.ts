@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MessageService } from 'primeng/api';
@@ -10,6 +10,7 @@ import { Helpers } from 'src/app/shared/helpers/Helpers';
 import { FileHandle } from 'src/app/shared/interfaces/file-handle';
 import { Intervention } from 'src/app/shared/interfaces/intervention-interface';
 import jwt_decode from 'jwt-decode'
+import { CategoriesService } from 'src/app/services/others/categories.service';
 
 @Component({
   selector: 'app-intervention-etudiant',
@@ -30,6 +31,7 @@ export class InterventionEtudiantComponent implements OnInit {
   newIntervention!: Intervention;
   interventionList: Intervention[] = []
   personnelList: any = []
+  categorieList: any = []
   senddingRequest = false
   selectedFile: any;
   composantVisible = false;
@@ -45,12 +47,13 @@ export class InterventionEtudiantComponent implements OnInit {
   files: File[] = [];
   selectSousCat: any
 
-
+  selectedId: any = 0;
+  loading = true
 
   sousCategorie: any[] = []
   depart: any[] = []
 
-  constructor(private messageService: MessageService, private formBuilder: FormBuilder, private sanitizer: DomSanitizer, private intervetionService: InterventionsService, private personnelService: PersonnelService, private sousCat: SousCategorieService, private departementService: DepartementService) {
+  constructor(private messageService: MessageService, private formBuilder: FormBuilder, private sanitizer: DomSanitizer, private intervetionService: InterventionsService, private personnelService: PersonnelService, private sousCat: SousCategorieService, private departementService: DepartementService, private categorieService: CategoriesService, private cdRef: ChangeDetectorRef) {
     this.token = localStorage.getItem('auth_token');
     this.decodedToken = this.decodeToken(this.token);
     this.inToken = this.decodedToken.matricule
@@ -138,7 +141,18 @@ export class InterventionEtudiantComponent implements OnInit {
   //   );
   // }
   getAllSousCat() {
-    this.sousCat.getAllsousCategorie().toPromise().then(
+    this.loading = false
+    console.log("id selectionné : ", this.selectedId);
+
+    // this.sousCat.getAllsousCategorie().toPromise().then(
+    //   (souscate) => {
+    //     this.sousCategorie = souscate;
+    //     console.log(this.sousCategorie);
+
+    //     this.isGettingAll = false;
+    //   }
+    // );
+    this.sousCat.getSousCatById(this.selectedId).subscribe(
       (souscate) => {
         this.sousCategorie = souscate;
         console.log(this.sousCategorie);
@@ -158,7 +172,7 @@ export class InterventionEtudiantComponent implements OnInit {
     );
   }
 
-  saveIntervention(e: Event): void {
+  saveIntervention(): void {
     console.log("formulaire : ", this.interventionForm.value.sous_categorie);
     console.log("matricule etudiant", this.inToken);
 
@@ -176,13 +190,13 @@ export class InterventionEtudiantComponent implements OnInit {
       this.senddingRequest = false
       this.interventionDialog = false
       this.submitting = false
-      window.location.reload()
+      // window.location.reload()
     },
       (res) => {
         this.senddingRequest = false;
         this.interventionDialog = false
         this.messageService.add({ severity: 'info', summary: 'En Cours', detail: 'En cours de creation de l\'intervention', life: 3000 });
-        window.location.reload()
+        // window.location.reload()
       }
     )
 
@@ -235,12 +249,24 @@ export class InterventionEtudiantComponent implements OnInit {
     }
 
   }
+
+  getAllCategorie() {
+    this.categorieService.getAllCategorie().subscribe(
+      (data) => {
+        this.categorieList = data
+        console.log("Les categories : ", this.categorieList);
+
+      })
+  }
+  onFirstDrop($event: any) {
+    console.log("voici le bon : ", $event);
+
+  }
   ngOnInit(): void {
     // this.getAllPersonnel()
     this.getAllIntervention()
-    this.getAllSousCat()
     this.getAllDepart()
-    console.log("selectionner : ", this.selectSousCat);
+    this.getAllCategorie()
 
   }
 
@@ -273,6 +299,8 @@ export class InterventionEtudiantComponent implements OnInit {
     formData.append('sous_categorie', this.interventionForm.get("sous_categorie")?.value);
     formData.append('matricule_etudiant', this.interventionForm.get("matricule_etudiant")?.value);
     formData.append('libelleIntervention', this.interventionForm.get("libelleIntervention")?.value);
+    console.log("voici le formDate : ", formData);
+    console.log("identifiant de la categorie : ", this.interventionForm.value.sous_categorie);
 
     this.intervetionService.saveIntervention(formData, this.interventionForm.value.sous_categorie, this.inToken).subscribe((data) => {
       console.log(data);
@@ -292,12 +320,11 @@ export class InterventionEtudiantComponent implements OnInit {
       (res) => {
         this.senddingRequest = false;
         this.interventionDialog = false
-        // tslint:disable-next-line:max-line-length
         this.messageService.add({ severity: 'info', summary: 'En Cours', detail: 'En cours de creation de l\'intervention', life: 3000 });
         // window.location.reload()
       }
     )
-    console.log(formData.get('sous_categorie'))
+    // console.log("la sous categorie : " , formData.get('sous_categorie'))
   }
 
   onFileSelect(event: any): void {

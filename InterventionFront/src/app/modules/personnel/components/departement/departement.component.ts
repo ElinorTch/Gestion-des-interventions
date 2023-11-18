@@ -30,6 +30,7 @@ export class DepartementComponent implements OnInit {
   token: any
   codeDepartement: any = ''
   listeDepartement: any[] = []
+  piecesJointes:any[] = []
   // inToken: any = '202320';
   selectedIntervention: any
 
@@ -56,6 +57,11 @@ export class DepartementComponent implements OnInit {
             life: 3000
           });
           this.interventionList = data
+          // for(const inside of data.pieceJointe){
+          //   this.piecesJointes.push(inside)
+          // }
+          // console.log("les pieces jointes sont :" , this.piecesJointes);
+          
           console.log(data);
 
         },

@@ -11,9 +11,17 @@
         <b>Description : </b>
         {{intervention?.libelleIntervention}}
     </p>
-    <p *ngIf="intervention?.personnel != null">
+    <p>
         <b>Personnel : </b>
-        {{intervention?.personnel.nom}} {{intervention.personnel.prenom}}
+        <span *ngIf="intervention?.personnel == null"> AUCUN </span>
+        <span *ngIf="intervention?.personnel != null"> {{intervention?.personnel.nom}} {{intervention.personnel.prenom}}
+        </span>
+    </p>
+    <p>
+        <b>Piece Jointes : </b>
+        <span *ngIf="intervention?.pieceJointe.length == 0"> AUCUNE PIECE JOINTE </span>
+        <span *ngIf="intervention?.pieceJointe.length != 0"> {{intervention?.pieceJointe}}
+        </span>
     </p>
     <p>
         <b>Status : </b>
