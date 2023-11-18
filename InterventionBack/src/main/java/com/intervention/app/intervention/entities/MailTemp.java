@@ -1,8 +1,6 @@
 package com.intervention.app.intervention.entities;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,16 +13,12 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "mail")
-//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "jsonIdentifier")
-public class Mail {
+@Table(name = "mail_tempon")
+public class MailTemp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idMail")
-    private Long idMail;
-
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long jsonIdentifier;
+    private Long idMailTemp;
 
     private String destinateur;
     private String destinataire;
@@ -38,6 +32,6 @@ public class Mail {
     private Intervention intervention;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "mail")
+    @OneToMany(mappedBy = "mailTemp", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<PieceJointe> pieceJointe;
 }
