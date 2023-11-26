@@ -41,6 +41,7 @@ import { ChartModule } from 'primeng/chart';
 
 import { DetailsInerventionComponent } from './shared/details-inervention/details-inervention.component';
 import { DepartementComponent } from './modules/personnel/components/departement/departement.component';
+import { TerminerComponent } from './shared/terminer/terminer.component';
 
 
 
@@ -68,7 +69,8 @@ import { DepartementComponent } from './modules/personnel/components/departement
     HomeComponent,
     HomeHeaderComponent,
     HomeNavComponent,
-    DetailsInerventionComponent
+    DetailsInerventionComponent,
+    TerminerComponent
   ],
   imports: [
     BrowserModule,

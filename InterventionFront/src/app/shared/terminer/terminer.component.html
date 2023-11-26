@@ -1,0 +1,25 @@
+<form class="p-4" enctype="multipart/form-data" [formGroup]="interventionForm" (ngSubmit)="terminerIntervention()">
+    <!-- <h1>{{termine}}</h1>  -->
+    <div class="p-float-label mb-4">
+        <textarea name="" formControlName="libelleIntervention" id="description" cols="30" rows="10"
+            placeholder="Entrer une description" class="form-control" style="text-align: justify;"></textarea>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="file" class="form-control" (change)="onFileSelect($event)" multiple id="pieceJointe"
+            accept=".jpg, .png, .pdf">
+    </div>
+    <div class="btns">
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-outline-success " type="submit" id="sub" style="width: 100%;"
+                    [disabled]="interventionForm.invalid || senddingRequest"><span
+                        *ngIf="!senddingRequest && !submitting">Envoyer</span>
+                    <div *ngIf="submitting" class="spinner-border text-sucess" role="status">
+                        <!-- <span class="sr-only">Loading...</span> -->
+                    </div>
+                </button>
+            </div>
+            
+        </div>
+    </div>
+</form>

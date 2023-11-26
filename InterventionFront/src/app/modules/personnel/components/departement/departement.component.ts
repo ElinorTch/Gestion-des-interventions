@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import jwt_decode from 'jwt-decode'
 import { MessageService } from 'primeng/api';
+import { AttachementService } from 'src/app/services/others/attachement.service';
 import { InterventionsService } from 'src/app/services/others/interventions.service';
 import { PersonnelService } from 'src/app/services/others/personnel.service';
 import { Helpers } from 'src/app/shared/helpers/Helpers';
@@ -30,11 +31,15 @@ export class DepartementComponent implements OnInit {
   token: any
   codeDepartement: any = ''
   listeDepartement: any[] = []
-  piecesJointes:any[] = []
+  piecesJointes: any[] = []
   // inToken: any = '202320';
   selectedIntervention: any
+  selectedInterventionForm: any
 
-  constructor(private messageService: MessageService, private formBuilder: FormBuilder, private interventionService: InterventionsService, private personnelService: PersonnelService) {
+  vueDetals = false;
+  vueTerminer = false;
+
+  constructor(private messageService: MessageService, private formBuilder: FormBuilder, private interventionService: InterventionsService, private personnelService: PersonnelService, private attachementService: AttachementService) {
     this.token = localStorage.getItem('auth_token');
     const decodedToken = this.decodeToken(this.token);
     this.inToken = decodedToken.id
@@ -61,7 +66,7 @@ export class DepartementComponent implements OnInit {
           //   this.piecesJointes.push(inside)
           // }
           // console.log("les pieces jointes sont :" , this.piecesJointes);
-          
+
           console.log(data);
 
         },
@@ -103,9 +108,17 @@ export class DepartementComponent implements OnInit {
   }
 
   detailsIntervention(intervention: any): void {
+    this.vueDetals = true
     this.selectedIntervention = intervention;
     this.interventionDialog = true
+
+  }
+  terminerIntervention(intervention: any): void {
     console.log(intervention);
+    
+    this.vueTerminer = true
+    this.selectedInterventionForm = intervention;
+    this.interventionDialog = true
   }
 
   demandeTraitee(itemIntervention: any) {
@@ -192,36 +205,6 @@ export class DepartementComponent implements OnInit {
       }
     )
   }
-
-  getAllIntervention() {
-    // this.interventionService.getInterventionByDepartement(this.codeDepartement).subscribe((data: any) => {
-    //   console.log(this.codeDepartement);
-    //   this.isGettingAll = false
-    //   this.messageService.add({
-    //     severity: 'success',
-    //     summary: 'succès',
-    //     detail: 'Les éléments sont tous biens chargés',
-    //     life: 3000
-    //   });
-    //   this.interventionList = data
-    //   console.log(data);
-
-    // },
-    //   (res: any) => {
-    //     this.interventionList = [];
-    //     this.isGettingAll = false;
-    //     this.messageService.add({
-    //       severity: 'error',
-    //       summary: 'erreur',
-    //       detail: 'erreur du chargement des données veuillez ressayez plustard',
-    //       life: 3000
-    //     });
-    //     console.log(res);
-
-    //   }
-    // )
-  }
-
   decodeToken(token: string): any {
     try {
       return jwt_decode(token);
@@ -240,5 +223,18 @@ export class DepartementComponent implements OnInit {
     }
     return description;
   }
+
+
+  downloadFile(event: any) {
+    for (const fichier of event) {
+      this.attachementService.download(fichier.fileName).subscribe((blob: any) => {
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = fichier.fileName;
+        link.click();
+      });
+    }
+  }
+
 
 }

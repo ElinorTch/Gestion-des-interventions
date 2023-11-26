@@ -20,7 +20,7 @@
     <p>
         <b>Piece Jointes : </b>
         <span *ngIf="intervention?.pieceJointe.length == 0"> AUCUNE PIECE JOINTE </span>
-        <span *ngIf="intervention?.pieceJointe.length != 0"> {{intervention?.pieceJointe}}
+        <span *ngIf="intervention?.pieceJointe.length != 0"> <i (click)="downloadFile()" style="font-size: 1.5em; cursor: pointer;" class='bx bx-file bx-tada' ></i>{{intervention?.pieceJointe.fileName}}
         </span>
     </p>
     <p>

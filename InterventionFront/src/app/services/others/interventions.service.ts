@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { AxiosService } from '../axios/axios.service';
 
 @Injectable({
@@ -47,5 +47,11 @@ export class InterventionsService {
   prendreEnCharge(data: any, status: any, idDemande: any, codePersonnel: any) {
     return this.httpClient.put(`${this.rootURL}/update/${status}/${idDemande}/${codePersonnel}`, data, { headers: this.headers })
   }
+
+  terminerIntervention(data: any, idDemande: any) {
+    return this.httpClient.put(`${this.rootURL}/update/${idDemande}`, data, { headers: this.headers })
+  }
+
+
 
 }

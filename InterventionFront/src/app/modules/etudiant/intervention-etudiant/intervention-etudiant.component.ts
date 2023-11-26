@@ -11,6 +11,7 @@ import { FileHandle } from 'src/app/shared/interfaces/file-handle';
 import { Intervention } from 'src/app/shared/interfaces/intervention-interface';
 import jwt_decode from 'jwt-decode'
 import { CategoriesService } from 'src/app/services/others/categories.service';
+import { AttachementService } from 'src/app/services/others/attachement.service';
 
 @Component({
   selector: 'app-intervention-etudiant',
@@ -318,13 +319,13 @@ export class InterventionEtudiantComponent implements OnInit {
       this.senddingRequest = false
       this.interventionDialog = false
       this.submitting = false
-      // window.location.reload()
+      window.location.reload()
     },
       (res) => {
         this.senddingRequest = false;
         this.interventionDialog = false
         this.messageService.add({ severity: 'info', summary: 'En Cours', detail: 'En cours de creation de l\'intervention', life: 3000 });
-        // window.location.reload()
+        window.location.reload()
       }
     )
     // console.log("la sous categorie : " , formData.get('sous_categorie'))

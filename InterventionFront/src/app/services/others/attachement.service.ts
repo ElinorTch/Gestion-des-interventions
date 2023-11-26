@@ -1,20 +1,33 @@
-import { HttpClient, HttpEvent } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { AxiosService } from '../axios/axios.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AttachementService {
 
-  constructor(private http : HttpClient) { }
+  constructor(private http: HttpClient, private axios: AxiosService) { }
+  token: string | any = this.axios.getAuthToken()
 
-  download(filename : string) : Observable<HttpEvent<Blob>>{
-    return this.http.get(`${environment.api}/file/download/${filename}`, {
+  headers = new HttpHeaders({
+    'Authorization': 'Bearer ' + this.token
+  });
+  // Observable<HttpEvent<Blob>>
+  download(filename: string): Observable<any> {
+    const options: any = {
       responseType: 'blob',
       reportProgress: true,
-      observe: 'events'
-    })
+      observe: 'events',
+      Headers: this.headers
+    }
+    return this.http.get(`${environment.file}file/download/${filename}`, options)
   }
+
+  // downloadFile(fileName: string): Observable<Blob> {
+  //   const url = `${environment.api}/file/download/${fileName}`; // Remplacez par l'URL de votre API pour télécharger le fichier
+  //   return this.http.get(url, { responseType: 'blob' });
+  // }
 }

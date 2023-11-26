@@ -72,8 +72,10 @@
                         </p>
                     </td>
                     <td>
-                        <p *ngIf="interventionItem.pieceJointe">{{interventionItem.pieceJointe}}</p>
-                        <p *ngIf="!interventionItem.pieceJointe">RAS</p>
+                        <p *ngIf="interventionItem.pieceJointe.length != 0"><i
+                                (click)="downloadFile(interventionItem.pieceJointe)"
+                                style="font-size: 1.5em; cursor: pointer;" class='bx bx-file bx-tada'></i></p>
+                        <p *ngIf="interventionItem.pieceJointe.length == 0">RAS</p>
                     </td>
                     <td>{{interventionItem.dateDemande | date : 'YYYY-MM-dd, h:mm:a'}}</td>
                     <td>
@@ -82,7 +84,7 @@
                                 *ngIf="interventionItem.status == 'ECHEC' || 'TRAITEE' && interventionItem.status != 'ATTENTE' && interventionItem.status != 'TRAITEMENT'">
                                 <button pButton pRipple class="p-button-rounded mr-1"
                                     style="background: danger;  display: flex; align-items: center; justify-content: center; padding: .5em; background: rgb(8, 3, 39); border: none;"
-                                    [disabled]="interventionItem.status == 'ECHEC' || interventionItem.status == 'TRAITEE'">
+                                    (click)="terminerIntervention(interventionItem.idDemande)">
                                     <i class='bx bxs-tired bx-tada'></i>
                                 </button>
                             </div>
@@ -173,10 +175,13 @@
 
 
 <p-confirmDialog [style]="{width: '650px'}"></p-confirmDialog>
-<p-dialog [style]="{width: '750px'}" header=" Details dur l\'intervention" [(visible)]="interventionDialog" [modal]="true"
+<p-dialog [style]="{width: '750px'}" header="Concernant l'intervention" [(visible)]="interventionDialog" [modal]="true"
     [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
-    <div style="padding: 1em 2em;">
+    <div style="padding: 1em 2em;" *ngIf="vueDetals">
         <app-details-inervention [intervention]="selectedIntervention"></app-details-inervention>
+    </div>
+    <div style="padding: 1em 0;" *ngIf="vueTerminer">
+        <app-terminer [termine]="selectedInterventionForm"></app-terminer>
     </div>
 </p-dialog>
 <p-toast></p-toast>

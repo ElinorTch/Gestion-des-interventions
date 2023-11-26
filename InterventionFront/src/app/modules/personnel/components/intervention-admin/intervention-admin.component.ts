@@ -5,6 +5,7 @@ import { InterventionsService } from 'src/app/services/others/interventions.serv
 import { Helpers } from 'src/app/shared/helpers/Helpers';
 import { Intervention } from 'src/app/shared/interfaces/intervention-interface';
 import jwt_decode from 'jwt-decode'
+import { AttachementService } from 'src/app/services/others/attachement.service';
 
 @Component({
   selector: 'app-intervention-admin',
@@ -29,6 +30,10 @@ export class InterventionAdminComponent implements OnInit {
   token:any
   // inToken: any = '202320';
   selectedIntervention: any
+  selectedInterventionForm: any
+  vueTerminer = false;
+  vueDetals = false;
+
 
   interventionForm = this.formBuilder.group({
     id_intervention: new FormControl(''),
@@ -42,7 +47,7 @@ export class InterventionAdminComponent implements OnInit {
     this.composantVisible = !this.composantVisible
   }
 
-  constructor(private messageService: MessageService, private formBuilder: FormBuilder, private interventionService: InterventionsService) {
+  constructor(private messageService: MessageService, private formBuilder: FormBuilder, private interventionService: InterventionsService, private attachementService: AttachementService) {
     this.token = localStorage.getItem('auth_token');
     const decodedToken = this.decodeToken(this.token);
     this.inToken = decodedToken.id
@@ -60,9 +65,10 @@ export class InterventionAdminComponent implements OnInit {
   }
 
   detailsIntervention(intervention: any): void {
+    this.vueDetals = true
     this.selectedIntervention = intervention;
     this.interventionDialog = true
-    console.log(intervention);
+
   }
 
 
@@ -243,5 +249,21 @@ export class InterventionAdminComponent implements OnInit {
       return description.substring(0, length) + '...';
     }
     return description;
+  }
+
+  downloadFile(event: any) {
+    for (const fichier of event) {
+      this.attachementService.download(fichier.fileName).subscribe((blob: any) => {
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = fichier.fileName;
+        link.click();
+      });
+    }
+  }
+  terminerIntervention(intervention: any): void {   
+    this.vueTerminer = true
+    this.selectedInterventionForm = intervention;
+    this.interventionDialog = true
   }
 }
