@@ -28,8 +28,8 @@ export class TerminerComponent implements OnInit {
   ngOnInit(): void {
     this.idDemande = this.termine
     this.interventionForm = this.formBuilder.group({
-      idDemande: this.idDemande,
-      libelleIntervention: new FormControl("Bonjour/Bonsoir très cher(e) étudiant(e) tout le département tient tout premièrement à s'excuser pour le problème que avez rencontré et nous espérons que la solution apportée à ce problème vous convienne... Dans le pire des cas nous ne pourons rien faire de plus pour vous #Nous vous remercions pour votre clémence", [Validators.required]),
+      // idDemande: this.idDemande,
+      libelleMail: new FormControl("Bonjour/Bonsoir très cher(e) étudiant(e) tout le département tient tout premièrement à s'excuser pour le problème que avez rencontré et nous espérons que la solution apportée à ce problème vous convienne... Dans le pire des cas nous ne pourons rien faire de plus pour vous #Nous vous remercions pour votre clémence", [Validators.required]),
       file: new FormControl(),
     })
   }
@@ -39,8 +39,8 @@ export class TerminerComponent implements OnInit {
     for (const file of this.files) {
       formData.append('file', file, file.name);
     }
-    formData.append('idDemande', this.interventionForm.get("idDemande")?.value);
-    formData.append('libelleIntervention', this.interventionForm.get("libelleIntervention")?.value);
+    // formData.append('idDemande', this.interventionForm.get("idDemande")?.value);
+    formData.append('libelleMail', this.interventionForm.get("libelleMail")?.value);
 
     this.interventionService.terminerIntervention(formData, this.interventionForm.value.idDemande).subscribe(() => {
       // this.interventionList.push(data);
@@ -53,12 +53,12 @@ export class TerminerComponent implements OnInit {
       this.interventionForm.reset;
       this.senddingRequest = false
       this.submitting = false
-      window.location.reload()
+      // window.location.reload()
     },
       (res) => {
         this.senddingRequest = false;
         this.messageService.add({ severity: 'info', summary: 'En Cours', detail: 'Vous venez de terminer complètement avec cette intervention !', life: 3000 });
-        window.location.reload()
+        // window.location.reload()
       }
     )
   }
