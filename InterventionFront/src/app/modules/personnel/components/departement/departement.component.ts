@@ -115,7 +115,7 @@ export class DepartementComponent implements OnInit {
   }
   terminerIntervention(intervention: any): void {
     console.log(intervention);
-    
+
     this.vueTerminer = true
     this.selectedInterventionForm = intervention;
     this.interventionDialog = true
