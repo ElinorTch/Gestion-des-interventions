@@ -226,14 +226,15 @@ export class DepartementComponent implements OnInit {
 
 
   downloadFile(event: any) {
-    for (const fichier of event) {
-      this.attachementService.download(fichier.fileName).subscribe((blob: any) => {
+    // for (const fichier of event) {
+      console.log(event[0].fileName);
+      this.attachementService.download(event[0].fileName).subscribe((blob: any) => {
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
-        link.download = fichier.fileName;
+        link.download = event[0].fileName;
         link.click();
       });
-    }
+    // }
   }
 
 
