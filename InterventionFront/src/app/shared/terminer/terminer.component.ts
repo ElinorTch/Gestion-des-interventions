@@ -42,7 +42,7 @@ export class TerminerComponent implements OnInit {
     // formData.append('idDemande', this.interventionForm.get("idDemande")?.value);
     formData.append('libelleMail', this.interventionForm.get("libelleMail")?.value);
 
-    this.interventionService.terminerIntervention(formData, this.interventionForm.value.idDemande).subscribe(() => {
+    this.interventionService.terminerIntervention(formData, this.idDemande).subscribe(() => {
       // this.interventionList.push(data);
       this.messageService.add({
         severity: 'success',
