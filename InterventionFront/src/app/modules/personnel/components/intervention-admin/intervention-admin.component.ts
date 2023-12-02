@@ -52,7 +52,7 @@ export class InterventionAdminComponent implements OnInit {
     const decodedToken = this.decodeToken(this.token);
     this.inToken = decodedToken.id
 
-    
+
     this.getAllIntervention()
    }
 
@@ -252,8 +252,9 @@ export class InterventionAdminComponent implements OnInit {
   }
 
   downloadFile(event: any) {
+    console.log("Fichier : ",event);
     for (const fichier of event) {
-      this.attachementService.download(fichier.fileName).subscribe((blob: any) => {
+      this.attachementService.download(fichier.fileName).subscribe((blob: Blob) => {
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
         link.download = fichier.fileName;
@@ -261,7 +262,15 @@ export class InterventionAdminComponent implements OnInit {
       });
     }
   }
-  terminerIntervention(intervention: any): void {   
+
+  // downloadFile(event: any) {
+  //   const file = [];
+  //   file.push(event);
+  //   console.log("Fichier : ", file);
+  // }
+
+
+  terminerIntervention(intervention: any): void {
     this.vueTerminer = true
     this.selectedInterventionForm = intervention;
     this.interventionDialog = true

@@ -16,14 +16,14 @@ export class AttachementService {
     'Authorization': 'Bearer ' + this.token
   });
   // Observable<HttpEvent<Blob>>
-  download(filename: string): Observable<any> {
+  download(filename: string): Observable<Blob> {
     const options: any = {
       responseType: 'blob',
       reportProgress: true,
       observe: 'events',
       Headers: this.headers
     }
-    return this.http.get(`${environment.file}file/download/${filename}`, options)
+    return this.http.get(`${environment.file}file/download/${filename}`, { responseType: 'blob'})
   }
 
   // downloadFile(fileName: string): Observable<Blob> {
