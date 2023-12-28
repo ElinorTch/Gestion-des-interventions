@@ -91,7 +91,7 @@ public class InterventionController {
     public ResponseEntity<String> saveIntervention(
             @PathVariable("idSousCategorie") Long idSousCategorie,
             @PathVariable("matricule") String matricule,
-            @RequestParam("file") List<MultipartFile> multipartFileList,
+            @RequestParam(name = "file", required = false) List<MultipartFile> multipartFileList,
             @RequestParam("libelleIntervention") String libelleIntervention
     ) {
         try {
@@ -118,7 +118,7 @@ public class InterventionController {
     public void termineeIntervention(
             @PathVariable("idDemande") Long idDemande,
             @RequestParam("libelleMail") String libelleMail,
-            @RequestParam("file") List<MultipartFile> multipartFileList
+            @RequestParam(name = "file", required = false) List<MultipartFile> multipartFileList
     ) throws IOException {
         interventionService.termineIntervention(idDemande, libelleMail, multipartFileList);
     }

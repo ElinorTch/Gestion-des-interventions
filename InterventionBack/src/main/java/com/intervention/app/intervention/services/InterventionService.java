@@ -78,13 +78,14 @@ public class InterventionService {
         Intervention intervention = new Intervention();
         List<PieceJointe> pieceJointes = new ArrayList<>();
 
-        for (MultipartFile file : multipartFileList) {
-            String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-            Path fileStorage = get(DIRECTORY, filename).toAbsolutePath().normalize();
-            copy(file.getInputStream(), fileStorage, REPLACE_EXISTING);
-            PieceJointe pieceJointe = new PieceJointe(null, filename, intervention, null, null);
-            pieceJointes.add(pieceJointe);
-        }
+        if (multipartFileList != null)
+            for (MultipartFile file : multipartFileList) {
+                String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+                Path fileStorage = get(DIRECTORY, filename).toAbsolutePath().normalize();
+                copy(file.getInputStream(), fileStorage, REPLACE_EXISTING);
+                PieceJointe pieceJointe = new PieceJointe(null, filename, intervention, null, null);
+                pieceJointes.add(pieceJointe);
+            }
 
         try {
             Etudiant etudiant = etudiantService.getEtudiantByMatricule(matricule);
@@ -149,7 +150,7 @@ public class InterventionService {
                         intervention.getEtudiant().getCandidat().getEmail(),
                         "Gestion des interventions IUSJ",
                         text +
-                                "Statut de l'intervention: TRAITEE",
+                                "\n Statut de l'intervention: TRAITEE",
                         intervention,
                         multipartFileList,
                         null

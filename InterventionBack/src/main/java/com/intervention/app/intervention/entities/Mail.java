@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -29,7 +30,10 @@ public class Mail {
     private String destinateur;
     private String destinataire;
     private String subject;
+
+    @Column(length=512)
     private String body;
+
     private int isSended;
 
     @JsonIgnore
