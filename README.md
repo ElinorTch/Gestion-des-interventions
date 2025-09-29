@@ -1,5 +1,4 @@
 # Gestion des Interventions
-[![Ask DeepWiki](https://devin.ai/assets/askdeepwiki.png)](https://deepwiki.com/ElinorTch/Gestion-des-interventions)
 
 This repository contains a full-stack web application for managing intervention requests at the Institut Universitaire Saint Jean (IUSJ). The system allows students to submit requests and track their status, while administrative staff can manage, assign, and resolve these interventions.
 
